@@ -5,7 +5,7 @@ OneCrew plugin marketplace for Codex. Install and start the OneCrew application 
 ## Install
 
 ```sh
-codex plugin marketplace add onecrew-dev/onecrew-plugins
+codex plugin marketplace add onecrewai/onecrew-plugins
 codex plugin add onecrew@onecrew
 ```
 
