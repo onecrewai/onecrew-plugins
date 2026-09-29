@@ -13,7 +13,7 @@ Use the connected OneCrew MCP tools and their current schemas. This skill suppli
 
 Before selecting a table, designing columns, or writing records, read [Dynamic tables](references/dynamic-tables.md). It defines table continuity within a conversation, entity updates, rich cell types, and write verification.
 
-For creator discovery and platform-specific setup or evidence limits, read [Creator discovery](references/creator-discovery.md).
+For creator discovery and platform-specific setup or evidence limits, read [Creator discovery](references/creator-discovery.md). Search `limit` defaults to 20 and accepts 1–100. Follow `poll_after_ms`, explain phase changes briefly, and report actual results when collection ends below the target.
 
 For mailbox synchronization, conversation reads, and replies, read [Email workflows](references/email.md).
 

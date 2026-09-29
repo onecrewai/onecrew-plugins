@@ -5,7 +5,7 @@ Connect Instagram in the Web Accounts panel using an existing signed-in Chrome/E
 Example creation:
 
 ```json
-{ "platform": "instagram", "query": "robotics", "candidate_limit": 10 }
+{ "platform": "instagram", "query": "robotics", "limit": 10 }
 ```
 
 Retain the returned search_id, poll status and fetch with `{search_id, platform:"instagram", params:{page:1,size:3}}`. `result.creators` contains author identity, available profile facts, matched/recent post excerpts and material warnings. Use author.id for dynamic-table identity `{platform:"instagram", platform_id}` and the returned author.url as the homepage.
@@ -16,4 +16,4 @@ The platform workflow reads a bounded recent-post sample and, when needed, the o
 
 Post excerpts are bounded and do not represent complete history. Use the shared [evaluation rules](match-evaluation.md), then save under [dynamic-table rules](dynamic-tables.md). Independent user search/profile/user-post/detail methods are internal reuse points for future Collect details, not extra MCP tools or a separate enrich job.
 
-The platform controls its page size. `candidate_limit` stops further search pages once enough distinct authors are collected; it does not truncate the final page. If 8 authors plus 5 new authors crosses a target of 10, all 13 are retained and checked. Request limits or inaccessible content produce explicit warnings. `fetch` page/size only divides cached output.
+The platform controls its page size. `limit` stops further search pages once enough distinct authors are collected; it does not truncate the final page. If 8 authors plus 5 new authors crosses a target of 10, all 13 are retained and checked. Request limits or inaccessible content produce explicit warnings. `fetch` page/size only divides cached output.

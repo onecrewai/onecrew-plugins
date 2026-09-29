@@ -3,10 +3,10 @@
 Connect Facebook in the Web Accounts panel by selecting an existing signed-in Chrome/Edge profile. OneCrew reads that profile's Facebook cookies and verifies the active identity. MCP uses the saved connection and selects the acting account internally.
 
 ```json
-{ "platform": "facebook", "query": "robotics", "candidate_limit": 10 }
+{ "platform": "facebook", "query": "robotics", "limit": 10 }
 ```
 
-Keep `search_id`, poll status, then call fetch with `{search_id, platform:"facebook", params:{page:1,size:3}}`. Facebook controls page sizes. `candidate_limit` is a target, not a return cap: if a page adds 5 authors to 8 already collected for a target of 10, all 13 are kept and receive profile and recent-post reads. No additional search page is requested for that target. Request budgets and unavailable content can leave explicit missing-data warnings.
+Keep `search_id`, poll status, then call fetch with `{search_id, platform:"facebook", params:{page:1,size:3}}`. Facebook controls page sizes. `limit` is a target, not a return cap: if a page adds 5 authors to 8 already collected for a target of 10, all 13 are kept and receive profile and recent-post reads. No additional search page is requested for that target. Request budgets and unavailable content can leave explicit missing-data warnings.
 
 Fetch returns cached `result.creators`; `has_more` means another cached page. Fetch does not make Facebook requests. Call continue only when `can_continue` is true, using the same search ID and bound connection. Do not restart searches to bypass throttling or login challenges.
 

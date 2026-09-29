@@ -9,7 +9,7 @@ Example creation:
   "platform": "x",
   "criteria": { "all_words": ["robotics"], "language": "en", "min_likes": 5, "replies": "exclude" },
   "result_mode": "Latest",
-  "candidate_limit": 10
+  "limit": 10
 }
 ```
 
@@ -21,4 +21,4 @@ Fetch reads cache only; `has_more` controls cached pages. Use `platform_search_c
 
 Recent posts are a limited sample with reposts/advertisements removed and returned timestamps used for sorting; a pinned post is not automatically newest. Null or missing evidence remains unknown. Read [match evaluation](match-evaluation.md) before rating and [dynamic tables](dynamic-tables.md) before saving. Standalone profile/post lookup methods are internal reuse points, not additional MCP tools in this release.
 
-The platform controls its page size. `candidate_limit` stops further search pages once enough distinct authors are collected; it does not truncate the final page. If 8 authors plus 5 new authors crosses a target of 10, all 13 are retained and checked. Request limits or inaccessible content produce explicit warnings. `fetch` page/size only divides cached output.
+The platform controls its page size. `limit` stops further search pages once enough distinct authors are collected; it does not truncate the final page. If 8 authors plus 5 new authors crosses a target of 10, all 13 are retained and checked. Request limits or inaccessible content produce explicit warnings. `fetch` page/size only divides cached output.
