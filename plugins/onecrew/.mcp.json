@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "onecrew": {
+      "type": "stdio",
+      "command": "./scripts/launch_onecrew_mcp",
+      "args": [],
+      "cwd": ".",
+      "env_vars": [
+        "HOME",
+        "USERPROFILE",
+        "LOCALAPPDATA",
+        "SYSTEMROOT",
+        "COMSPEC",
+        "PATHEXT",
+        "ONECREW_BINARY",
+        "ONECREW_DATA_DIR"
+      ]
+    }
+  }
+}

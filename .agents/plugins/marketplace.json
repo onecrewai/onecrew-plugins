@@ -1,0 +1,20 @@
+{
+  "name": "onecrew",
+  "interface": {
+    "displayName": "Onecrew"
+  },
+  "plugins": [
+    {
+      "name": "onecrew",
+      "source": {
+        "source": "local",
+        "path": "./plugins/onecrew"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

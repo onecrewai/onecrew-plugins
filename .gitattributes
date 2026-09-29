@@ -1,0 +1,5 @@
+* text=auto
+*.json text eol=lf
+*.md text eol=lf
+launch_onecrew_mcp text eol=lf
+*.cmd text eol=crlf

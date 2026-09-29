@@ -1,0 +1,25 @@
+#!/bin/sh
+set -eu
+
+if [ -n "${ONECREW_BINARY:-}" ]; then
+  executable=$ONECREW_BINARY
+else
+  if [ -z "${HOME:-}" ]; then
+    printf '%s\n' 'OneCrew could not locate your home directory.' >&2
+    exit 127
+  fi
+  executable="$HOME/Applications/OneCrewConnect/onecrew"
+fi
+
+case "$executable" in
+  /*) ;;
+  *) printf '%s\n' 'ONECREW_BINARY must be an absolute executable path.' >&2; exit 64 ;;
+esac
+if [ ! -f "$executable" ] || [ ! -x "$executable" ]; then
+  printf '%s\n' 'OneCrew is not installed at the configured location. Run the OneCrew installer, or set ONECREW_BINARY to its absolute path.' >&2
+  exit 127
+fi
+
+# Do not keep the installed plugin directory as the long-running process cwd.
+cd /
+exec "$executable" mcp
