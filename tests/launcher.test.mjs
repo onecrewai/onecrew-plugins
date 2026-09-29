@@ -39,7 +39,7 @@ test('OS launcher finds the installed program without Node or OneCrew on PATH', 
     if (process.env[key]) env[key] = process.env[key];
   }
   const launcher = path.join(plugin, 'scripts/launch_onecrew_mcp') + (windows ? '.cmd' : '');
-  const run = (extra = {}, input = 'mcp: payload\n') => spawnSync(launcher, [], {
+  const run = (extra = {}, input = 'mcp: payload\n') => spawnSync(windows ? `"${launcher}"` : launcher, [], {
     cwd: temp, env: { ...env, ...extra }, input, encoding: 'utf8', timeout: 5000,
     shell: windows ? process.env.ComSpec : false, windowsHide: true,
   });
