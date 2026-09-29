@@ -1,11 +1,13 @@
 ---
 name: onecrew
-description: Discover creators, manage email workflows, and maintain OneCrew workspace data. Use when checking platform connection status, researching creators, working with email, or creating, reading, and updating dynamic tables through OneCrew MCP tools.
+description: Discover creators, manage email workflows, and maintain OneCrew workspace data. Use when checking platform connections, researching creators, working with email or dynamic tables through OneCrew MCP, or installing, updating, and reinstalling the OneCrew Codex plugin.
 ---
 
 # OneCrew
 
 Follow the user's language for replies and user-facing content unless they request another language. Keep API field names, IDs, and enum values unchanged.
+
+For OneCrew plugin installation, updates, or reinstallation, read [Plugin updates](references/plugin-update.md). Use the local Codex CLI workflow described there.
 
 Read search platform connection status with `platform_connection_list`; it returns the last known state and check time without making a new provider request.
 
