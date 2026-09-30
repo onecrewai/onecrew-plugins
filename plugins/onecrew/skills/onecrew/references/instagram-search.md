@@ -8,12 +8,15 @@ Example creation:
 { "platform": "instagram", "query": "robotics", "limit": 10 }
 ```
 
-Retain the returned search_id, poll status and fetch with `{search_id, platform:"instagram", params:{page:1,size:3}}`. `result.creators` contains author identity, available profile facts, matched/recent post excerpts and material warnings. Use author.id for dynamic-table identity `{platform:"instagram", platform_id}` and the returned author.url as the homepage.
+Retain the returned search_id, poll status and fetch with `{search_id, platform:"instagram", params:{page:1,size:3}}`. `result.creators` contains author identity, available profile facts, matched post excerpts. Use author.id for dynamic-table identity `{platform:"instagram", platform_id}` and the returned author.url as the homepage.
 
 The native composite search cursor is private and bound to both query and acting account. Normal cookie refresh preserves that binding; reconnecting or deleting the account invalidates associated searches. Never supply or reconstruct a cursor, choose a different acting account or automatically rerun an expired task. Cached `has_more` and explicit `can_continue` have different meanings; fetch itself does not make platform requests.
 
-The platform workflow reads a bounded recent-post sample and, when needed, the original matched post's missing caption. It validates post and author identity. A null text means unavailable/not returned; an empty text can be a confirmed empty caption. Do not manufacture text for either case. Pinned posts, reposts and uncertain dates do not establish recency. Profile/private-resource failures appear as warnings; authentication, challenge and throttle errors stop the task with the affected account's safe identity.
+Ordinary search reads basic profiles for distinct authors; it does not read recent timelines or fill missing search captions with post-detail calls. A null text means unavailable/not returned; an empty text can be a confirmed empty caption. Do not manufacture text for either case. Pinned posts, reposts and uncertain dates do not establish recency. Source protocol failures are reported separately; authentication, challenge and throttle errors stop the task with the affected account's safe identity.
 
-Post excerpts are bounded and do not represent complete history. Use the shared [evaluation rules](match-evaluation.md), then save under [dynamic-table rules](dynamic-tables.md). Independent user search/profile/user-post/detail methods are internal reuse points for future Collect details, not extra MCP tools or a separate enrich job.
+Post excerpts are bounded and do not represent complete history. Use the shared [evaluation rules](match-evaluation.md), then save under [dynamic-table rules](dynamic-tables.md). Requested recent reads use platform_posts_create/status/fetch as described in [Platform posts](platform-posts.md).
 
 The platform controls its page size. `limit` stops further search pages once enough distinct authors are collected; it does not truncate the final page. If 8 authors plus 5 new authors crosses a target of 10, all 13 are retained and checked. Request limits or inaccessible content produce explicit warnings. `fetch` page/size only divides cached output.
+
+
+Search combines native author identity and avatars with a basic profile lookup per distinct author. Biography or follower_count still unavailable after that attempt remains unknown. Missing search captions stay unknown; search does not return recent_posts. Follow [Creator discovery](creator-discovery.md) to screen and save. Use [Platform posts](platform-posts.md) for requested recent content, retaining the same native IDs.

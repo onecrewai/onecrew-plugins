@@ -3,7 +3,7 @@
 ## Keep one target table per conversation
 
 - Reuse the table already selected or created for the conversation. Retain its `table_id`, real column IDs, and row IDs.
-- On the first save, use the user's specified or selected table. Create the first table only when no target table exists.
+- On the first save, use the user's specified or selected table. Create the first table only when no target table exists. For creator search results, first confirm at least one candidate is retained for writing; no retained candidates means no empty table.
 - Once a target exists, create another only when the user explicitly requests a new table or the business subject changes. Explain the reason when creating another table. If the user selects a different existing table, use it directly without making a copy.
 - Additional searches, changed keywords or filters, more records, revised evaluations, corrections, and requested column changes stay in the current table by default. These changes alone do not constitute a new subject.
 - A subject change means a different business object or independent task, such as moving from a campaign's creator shortlist to a separate project's supplier list. Do not infer a subject change merely from another search or field edit.
@@ -30,7 +30,7 @@ Create only requested or task-required business columns. Unless explicitly reque
 | telephone | Telephone number string | Contact numbers |
 | score | `{level, reason?}` | Rating badge with the reason shown on hover |
 
-All types accept `null` for unknown values. `people` and `company` require a nonempty `name`; their URL fields are optional and must use HTTP or HTTPS. Supply an actual known image URL for `image_url`, not a homepage or an invented avatar URL.
+A `website` cell takes the URL string alone, never the `people`/`company` object. All types accept `null` for unknown values. `people` and `company` require a nonempty `name`; their URL fields are optional and must use HTTP or HTTPS. Supply an actual known image URL for `image_url`, not a homepage or an invented avatar URL.
 
 ### Prefer rich cells
 
@@ -42,7 +42,13 @@ Keep a consistent rich type when individual and brand accounts share a column; d
 
 `score.level` must be `excellent`, `good`, `medium`, or `low`; put the explanation in `reason`. Before assigning or revising a rating, follow [Evaluation and reasons](match-evaluation.md). Do not add a separate evaluation or score-reason column by default. A separately requested biography or note may have its own column. Creator discovery evaluates fit to the current requirements; ordinary tables do not automatically need scores.
 
-Rendering depends on `data_type`, not words such as “avatar” or “score” in the column name. `people`, `company`, and `score` currently do not support sorting.
+Rendering depends on `data_type`, not words such as “avatar” or “score” in the column name. Tables with a score column always display excellent → good → medium → low → null using the first score column in schema order, across the whole table before pagination. Ties keep stable row order; null appears as a neutral Unrated badge and stays null in storage. No sorting tool or insertion reordering is needed. Ordinary field sorting remains for tables without scores; people/company are not sorted as JSON.
+
+## Search and assessment writes
+
+Read all cached search pages, then use the screening rules in [Creator discovery](creator-discovery.md) before rating and saving. Do not add confirmed required-condition failures or candidates without topic evidence. Relevant but unverified records may have null scores when acceptable to the user; report them separately. An explicit request for all raw candidates overrides this default. Do not delete existing low/null rows or discard records solely by grade. Match by platform + native ID, not a similar name. Ordinary repeat searches preserve existing nonempty scores and nonempty fields when the new value is unknown. Explicit reassessment or deep evaluation updates the same row's score level and reason together; when old criteria no longer apply and required evidence is missing, clear the whole score to null.
+
+Rich-cell updates replace the entire value. Read it first and preserve identity plus other unchanged fields when changing name, image or URL. Old cells without identity remain valid; show “Not recorded” rather than guessing or performing bulk ID lookups. Do not add a separate ID column or change column types to handle legacy data.
 
 ## Tool sequence
 
@@ -75,7 +81,7 @@ The following illustrates the value format only. Replace placeholder IDs with to
 {
   "table_id": "<returned-table-id>",
   "rows": [{"values": {
-    "<creator-column-id>": {"name": "Example creator", "image_url": "https://example.com/avatar.png", "url": "https://example.com/profile"},
+    "<creator-column-id>": {"name": "Example creator", "image_url": "https://example.com/avatar.png", "url": "https://example.com/profile", "identity": {"platform": "instagram", "platform_id": "<verified-native-id-string>"}},
     "<channel-column-id>": "https://example.com/profile",
     "<match-column-id>": {"level": "good", "reason": "<developed evidence-based evaluation paragraph>"}
   }}]
@@ -86,8 +92,8 @@ Do not save example URLs or values as real records. Omit unknown image URLs and 
 
 ## Preserve platform identity
 
-`people` and `company` support `identity: {platform, platform_id}`. Preserve a known native ID exactly as returned; for YouTube results, use `platform: "youtube"` and the returned `platform_id`. Store identity with the name, avatar, and URL in the rich cell, not in another platform-ID column.
+`people` and `company` support `identity: {platform, platform_id}`. When a search result supplies a native ID, save identity on the first write, with platform_id as a string even beyond JavaScript safe integer range; for YouTube results, use `platform: "youtube"` and the returned `platform_id`. Store identity with the name, avatar, and URL in the rich cell, not in another platform-ID column.
 
-Identity is hidden in the UI but returned when reading records. Omit it when manually entered data has no reliable identity; never infer native IDs from names, handles, or URLs. Preserve an existing identity when editing the rich cell unless intentionally replacing the entity.
+The grid stays compact; the people/company editor displays platform and a copyable native ID as read-only information. Identity is also returned when reading records. Omit it when manually entered data has no reliable identity; never infer native IDs from names, handles, or URLs. Preserve an existing identity when editing the rich cell unless intentionally replacing the entity.
 
 The database does not enforce entity uniqueness within or across tables. The caller must inspect existing identities and choose update versus append; do not assume automatic deduplication.

@@ -1,26 +1,31 @@
 # Creator discovery
 
-Use `platform_connection_list` to identify supported search platforms and read configured connections. It returns the last known status and check time; it does not verify credentials with the provider. Setup, live verification and credential changes belong in the Web panel at the returned `connect_url`.
+Use `platform_connection_list` for supported platforms and saved connection state. Setup and live account verification belong in the Web Accounts panel at `connect_url`.
 
-Match the request to the platform reference before starting a search. Topic discovery, global rankings, exact identity lookup and general web research are different capabilities. When the requested coverage is unavailable, use a suitable tool already provided by the client or explain the limitation; do not assume every MCP client has web search.
+## Search, screen, assess, save
 
-Use `platform_search_create`, `platform_search_status` and `platform_search_fetch` for discovery. For supported resumable results, `platform_search_continue` explicitly collects another batch using the same search ID and bound credential; call it only when the platform result reports can_continue=true. Cached fetch pagination never contacts the upstream platform. Retain both the search ID and platform; fetch parameters and the nested `result` follow that platform’s contract. Searches are temporary, not a queryable history. Save selected evidence to the target dynamic table for persistence, and never silently recreate expired tasks. Read the relevant platform reference before searching or interpreting evidence:
+1. Keep the conversation target table and user criteria. Do not create a new result table before knowing whether any candidates will be saved.
+2. Call `platform_search_create`, retain search_id and platform, and poll `platform_search_status` at poll_after_ms until terminal. Fetch every cached page using result.has_more. Running fetch returns result:null.
+3. Review the basic profiles and matched evidence under the same criteria. Check known required-condition failures first, then topic relevance, then unknown attributes and preferences. Follow [Evaluation and reasons](match-evaluation.md).
+4. Do not add clearly unsuitable candidates or candidates without supported topic relevance. Relevant candidates with unknown required attributes may be retained with score:null if the user accepts unverified records; name the unknown condition in the reply and do not count them as fully qualified. Weak preferences are not automatic exclusions. Do not add unstated follower or engagement requirements.
+5. Score retained candidates and save to the current table. If a new table is needed, create it only now, with at least one writable candidate, following [Dynamic tables](dynamic-tables.md). Match identity.platform + identity.platform_id; update matching rows and append new ones. Preserve nonempty scores on ordinary repeated searches and do not delete old rows based on weaker new evidence.
+6. Verify writes and return the exact table web_url with candidate, retained, new/matched and unverified counts as applicable. No retained candidates means no new table or writes; report the shortfall. Preview-only requests skip writing. If the user explicitly asks to save all raw candidates, keep them without claiming they all qualify.
 
-| Platform  | Reference                                  |
-| --------- | ------------------------------------------ |
-| YouTube   | [API search and evidence](youtube-api.md)  |
-| X         | [Search and evidence](x-search.md)         |
-| Instagram | [Search and evidence](instagram-search.md) |
-| Facebook  | [Search and evidence](facebook-search.md)  |
+limit defaults to 20 and accepts 1–100. The source controls page size: read all authors from the final page even when the target is exceeded. The target counts candidates, not proven matches. For example, 13 candidates may yield 7 saved rows, including one relevant but unverified record. Report that distinction; do not fill the table with unsuitable results or automatically continue, restart or change keywords to reach a count. Do not split oversized requests to bypass limits.
 
-Evaluate returned evidence using [Evaluation and reasons](match-evaluation.md). Save results under [Dynamic tables](dynamic-tables.md), maintaining the conversation's target table. Do not infer support for additional platforms or obtain credentials through chat or tools.
+Search includes basic profiles and matched evidence. X reuses sufficient native author fields and fills missing basics when needed; Instagram/Facebook look up distinct authors within the same search; YouTube batches channel profiles. Recent timelines are not read. Fields still missing after a profile attempt remain unknown, not empty biographies or zero followers; profile_error explains an unavailable or unfinished lookup. A keyword-selected post does not establish sustained recent relevance.
 
-X/Instagram/Facebook accounts are selected internally from the eligible pool; never pass an operator account, Cookie, or Key to a search. Target usernames and X `from_accounts` filter subjects, not the acting account. A continuation uses the original connection and never switches accounts midway. Connection changes invalidate its old search. Respect rate-limit retry times instead of creating another task to work around them.
+| Platform | Reference |
+|---|---|
+| YouTube | [API search](youtube-api.md) |
+| X | [Search](x-search.md) |
+| Instagram | [Search](instagram-search.md) |
+| Facebook | [Search](facebook-search.md) |
 
-Search is MCP-only. Fetch small pages: X/Instagram/Facebook default to 3 creators, with a maximum size of 10. Post text is an excerpt; the backend reads limited source pages and recent-post samples, sorts returned recent samples by publication date, and never promises complete history. Warnings describe actual missing or inaccessible evidence. Do not request or invent execution counters, an enrichment status, or a separate automatic enrich stage. The platform workflow already performs its own bounded profile and evidence reads.
+Accounts/Keys are selected internally. X from_accounts filters subjects, not the acting account. A continuation uses the original connection and completed profile checkpoints. Only result.can_continue permits an explicit platform_search_continue; it is not proof a failed connection recovered. When next_action is check_proxy_in_web, show the affected account and connect_url and wait for user-confirmed recovery. Do not automatically recreate failed or expired tasks.
 
-All platforms use `limit`: an integer from 1 to 100, default 20. Do not split oversized requests into many jobs to bypass the limit. Page size is controlled by the upstream platform. The collection target is not a hard result cap: retain and check every author from the last page, then stop requesting search pages once the target is reached. Cached fetch pagination does not change the number collected.
+Poll at the returned interval (initially 5 seconds, then 10 seconds after 30 seconds). completed means the run ended; inspect stop_reason and report actual counts. Fetch is cached and never extends coverage. Social cached pages default to 3, maximum 10; YouTube defaults to 20, maximum 100.
 
-While queued/running, wait the returned `poll_after_ms` before polling again: initially 5 seconds, increasing to 10 seconds after 30 seconds of the current run. Running `phase` is `searching` or `reading_details`; report a phase change without invented counts or percentages. Avoid repeating unchanged progress.
+## Recent-content evaluation
 
-`completed` means the run ended, not that it met the target. Read `result.stop_reason` when present: `limit_reached` means the target was reached; `exhausted` means no further source page; `page_limit` or `request_limit` means a budget was reached; `pagination_unavailable` means the source cursor was missing or repeated. Report the actual results and any missing-evidence warnings. Only `can_continue` authorizes a continuation; never restart automatically to fill a shortfall.
+Read [Platform posts](platform-posts.md) only when the user requests recent content or evaluation requires independent recent evidence. Use selected native account IDs; do not reread every candidate by default. Basic profiles are already part of search, and missing profile facts cannot be filled with a posts task. Update the same table rows when reassessing.
