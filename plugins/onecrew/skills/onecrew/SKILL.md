@@ -21,9 +21,9 @@ For creator discovery, read [Creator discovery](references/creator-discovery.md)
 
 For requested recent posts or an evaluation that needs recent evidence, read [Platform posts](references/platform-posts.md). Ordinary search does not require this follow-up. Use native account IDs from search results or saved records.
 
-For requested email, phone or linked social accounts, read [Profile contact enrichment](references/platform-enrich.md). Reuse verified profile URLs already available in the conversation. For a broader email lookup, use the webpage contact-research guidance when the profile sources are insufficient.
+For requested contacts, read [Profile contact enrichment](references/platform-enrich.md). Use an exact profile URL directly when available. Finding a named creator's contact details does not require a topic discovery search.
 
-For public webpage research and article text, use the separate `onecrew-web-research` skill.
+Use `onecrew-web-research` and OneCrew's `web_search` / `web_extract` only when the user explicitly names OneCrew or selects its plugin in this conversation. General web requests and installed tools alone do not trigger these OneCrew tools. Other available web tools remain available.
 
 For mailbox synchronization, conversation reads, and replies, read [Email workflows](references/email.md).
 
