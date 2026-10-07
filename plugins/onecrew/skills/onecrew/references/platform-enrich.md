@@ -18,7 +18,7 @@ Use profile URLs, not post URLs or search keywords. X/Instagram use username pro
 
 Replace the example profile URL with the user's exact target.
 
-Reuse an exact profile URL already provided by the user or verified earlier. Submit it directly to enrich with the requested fields. A known channel URL does not require another webpage search for the channel's identity.
+Reuse an exact profile URL already provided by the user or verified earlier. Submit it directly to enrich with the requested fields, then fetch the result before deciding whether another lookup is needed.
 
 ## Read results
 
@@ -50,6 +50,10 @@ Only directly supplied profile/contact information and up to two linked public L
 
 `email: []` means this lookup did not return an address. `youtube.business_email_not_public` describes the public YouTube route's restriction. Keep contact leads already obtained from other sources. For broader contact research, use the webpage skill only when the user explicitly invoked OneCrew in the current conversation; follow its three-step contact workflow. If the user requested only platform enrichment, report that limited result.
 
-Show the source of each reported contact value. Do not guess or validate unpublished addresses, unlock hidden email, send messages, or change a score based on enrichment alone. Saving requested results uses the existing table workflow; enrichment itself does not write tables.
+Cite each value using its own `sources[].url` and `field`. When both the requested platform and a linked page support a value, cite the platform source first; group values only when their cited sources match. A linked page listed for one value does not establish the source of another value.
+
+These sources were already read by enrichment. Use the returned evidence directly for profile-contact requests; fetch another page only when additional information is needed. `web_extract` uses public HTTP without connected platform sessions, so its failure does not invalidate a successful platform read.
+
+Do not guess or validate unpublished addresses, unlock hidden email, send messages, or change a score based on enrichment alone. Saving requested results uses the existing table workflow; enrichment itself does not write tables.
 
 When the tool returns a connection or proxy recovery action, show its Web panel link and wait for user-confirmed recovery. Account, Key and proxy configuration belongs in that panel.

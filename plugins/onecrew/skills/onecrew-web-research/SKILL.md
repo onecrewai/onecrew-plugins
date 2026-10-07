@@ -9,11 +9,13 @@ Use this skill and OneCrew's `web_search` / `web_extract` only after the user ex
 
 Follow the user's language and the current tool schemas. OneCrew sign-in is required; use `account` and the returned authorization link when needed.
 
+For contacts on a supplied platform profile, use OneCrew's enrichment workflow and its per-value sources. Use this webpage workflow for additional information that still needs reading.
+
 Use `web_search` to find source pages. Limit defaults to 5 and is capped at 10. Results carry `evidence: search_candidate`; read the source before making a factual claim. `no_matches` means the search returned an explicit no-match response. Access checks, timeouts and unreadable responses are errors, not evidence of absence.
 
 Use `web_extract` with `mode: page` for contact pages and profiles, or `mode: article` for article text. Leave `include_links` false when reading evidence; enable it when links are needed for a follow-up. Relevant links include source fields, labels and available context. Check text and link truncation separately. The tool visits only the requested page and necessary redirects.
 
-For a creator's other accounts, start with their name. If returned results are irrelevant or explicitly have no matches, refine with their name plus official site or Linktree, up to three queries per creator. Stop searching when a suitable official source is found. Read its published links to verify associations. A matching username alone leaves an account unverified.
+When finding accounts without a supplied profile URL, start with the creator's name. If returned results are irrelevant or explicitly have no matches, refine with their name plus official site or Linktree, up to three queries per creator. Stop searching when a suitable official source is found. Read its published links to verify associations. A matching username alone leaves an account unverified.
 
 `page_published_link` establishes that the source page publishes a link. Check whether that source belongs to the creator, then distinguish the creator's own account from a related brand, charity, show, store or guest appearance. Preserve the page's label and source URL. Video and playlist URLs are content links, not account profiles.
 
@@ -23,6 +25,6 @@ Prefer original sources for factual claims and cite the exact source URLs. Disti
 
 Report `requires_rendering` when HTTP content needs JavaScript, `login_required` for login, `content_locked` for permission gates, `blocked` for access checks and `rate_limited` for rate limits. Stop the affected request; changing entry points or queries must not be used to evade an access check. A public article URL subsequently supplied by the user is an independent input and may be read directly, subject to that page's access restrictions. Locked links and failed or partial source reads leave the missing information unresolved.
 
-For creator discovery use the platform search tools. For requested email, phone or linked social accounts on supplied profiles, use the OneCrew enrichment workflow. Web text extraction and contact enrichment are separate operations.
+For creator discovery use the platform search tools.
 
 Web research does not automatically create tables, write records or send messages. Perform those actions only within the user's requested workflow and follow the OneCrew skill's relevant reference.
