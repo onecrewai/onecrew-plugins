@@ -21,6 +21,9 @@ For creator discovery, read [Creator discovery](references/creator-discovery.md)
 
 For requested recent posts or an evaluation that needs recent evidence, read [Platform posts](references/platform-posts.md). Ordinary search does not require this follow-up. Use native account IDs from search results or saved records.
 
+For requested email, phone or linked social accounts on specified profiles, read [Profile contact enrichment](references/platform-enrich.md). This is an explicit follow-up, not a default step after search.
+
+For public webpage research and article text, use the separate `onecrew-web-research` skill.
 
 For mailbox synchronization, conversation reads, and replies, read [Email workflows](references/email.md).
 

@@ -1,6 +1,6 @@
 # OneCrew
 
-OneCrew plugin marketplace for Codex. Install and start the OneCrew application before using the plugin.
+OneCrew plugin marketplace for Codex. Includes the OneCrew and OneCrew web research skills. Install and start the OneCrew application before using the plugin.
 
 ## Install
 

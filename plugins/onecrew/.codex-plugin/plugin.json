@@ -1,14 +1,14 @@
 {
   "name": "onecrew",
-  "version": "0.1.5",
-  "description": "Discover creators, manage email outreach, and maintain workspace data with OneCrew.",
+  "version": "0.1.6",
+  "description": "Discover creators, read public web sources, manage email, and maintain OneCrew workspace data.",
   "author": {
     "name": "OneCrew"
   },
   "interface": {
     "displayName": "OneCrew",
-    "shortDescription": "Creator discovery, email, and workspace data",
-    "longDescription": "Find relevant creators, organize research in workspace tables, and manage email conversations through your local OneCrew service.",
+    "shortDescription": "Creators, web research, email, and workspace data",
+    "longDescription": "Find creators, read public web sources, organize workspace tables, and manage email conversations through your local OneCrew service.",
     "developerName": "OneCrew",
     "category": "Productivity",
     "capabilities": [],
