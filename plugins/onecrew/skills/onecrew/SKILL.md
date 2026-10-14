@@ -17,7 +17,7 @@ Use the connected OneCrew MCP tools and their current schemas. This skill suppli
 
 Before selecting a table, designing columns, or writing records, read [Dynamic tables](references/dynamic-tables.md). It defines table continuity within a conversation, entity updates, rich cell types, and write verification.
 
-For creator discovery, read [Creator discovery](references/creator-discovery.md). Search includes basic profiles and matched content. Check relevance and required conditions, then score and save retained candidates. `limit` is a candidate target: default 20, range 1–100. Follow `poll_after_ms` and report actual saved and unverified counts.
+For creator discovery, read [Creator discovery](references/creator-discovery.md). Search includes basic profiles and matched content. Check relevance and required conditions, assign 1–2 short evidence-based content tags, then score and save retained candidates with their creator and platform profile. Followers is optional. `limit` is a candidate target: default 20, range 1–100. Follow `poll_after_ms` and report actual saved and unverified counts.
 
 For requested recent posts or an evaluation that needs recent evidence, read [Platform posts](references/platform-posts.md). Ordinary search does not require this follow-up. Use native account IDs from search results or saved records.
 

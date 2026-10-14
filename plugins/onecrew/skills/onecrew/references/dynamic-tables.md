@@ -28,6 +28,7 @@ Create only requested or task-required business columns. Unless explicitly reque
 | website | HTTP(S) URL string | A separately displayed website link |
 | profile | `{platform, url}` | Account homepage with a required platform |
 | followers | `{platform, count}` | Platform audience count; nonnegative safe integer or null |
+| topics | Array of 1–2 short category tags, or `[]` when unknown | Evidence-based content topics |
 | email | Array of email address strings, at most 20 | Ordered contact addresses |
 | telephone | Array of telephone strings, at most 20 | Ordered contact numbers |
 | score | `{level, reason?}` | Rating badge with the reason shown on hover |
@@ -36,7 +37,9 @@ A `website` cell takes the URL string alone, never a profile or entity object. A
 
 ### Prefer rich cells
 
-Use `people` or `company` for entity details. Keep the name and avatar/logo in the same object. New creator search tables default to three columns in order: `people`, `profile`, `score`. Specialized titles are fixed and localized: Creator/Profile/Score or 达人/平台主页/评分; repeated types receive numbered titles. The same rule applies to company, website, followers, email and telephone. General-purpose columns keep their names and may be renamed with `table_rename_column`; tables may be renamed with `table_rename`. An explicitly brand-only list may use `company` instead of `people`. Preserve an existing target table's schema unless the user requests changes.
+Use `people` or `company` for entity details. Keep the name and avatar/logo in the same object. New creator search tables default to four columns in order: `people`, `topics`, `profile`, `score`. Specialized titles are fixed and localized: Creator/Content topics/Profile/Score or 达人/内容领域/平台主页/评分; repeated types receive numbered titles. The same rule applies to company, website, followers, email and telephone. General-purpose columns keep their names and may be renamed with `table_rename_column`; tables may be renamed with `table_rename`. An explicitly brand-only list may use `company` instead of `people`. Preserve an existing target table's schema unless the user requests changes.
+
+Write 1–2 short content-category tags in `topics`, based on the profile and content evidence actually read. Unknown topics stay `[]`; do not invent categories or derive them from stored score prose. Repeat searches preserve known tags when new evidence is unavailable; update the complete array when the evidence supports a change. Platform is required in every nonempty `profile`; `followers` remains optional.
 
 Profile is the actual account or channel homepage. Use a handle URL only when verified by the source; do not invent a handle, substitute a video URL, or add a second source column. The entity's native identity stays in the Name cell for matching records. Missing avatars or evaluations remain absent or `null` without changing this default structure.
 
@@ -71,6 +74,7 @@ When a new table is appropriate:
   "name": "Creator shortlist",
   "columns": [
     {"name": "Creator", "data_type": "people"},
+    {"name": "Content topics", "data_type": "topics"},
     {"name": "Profile", "data_type": "profile"},
     {"name": "Score", "data_type": "score"}
   ]
@@ -84,6 +88,7 @@ The following illustrates the value format only. Replace placeholder IDs with to
   "table_id": "<returned-table-id>",
   "rows": [{"values": {
     "<creator-column-id>": {"name": "Example creator", "image_url": "https://example.com/avatar.png", "url": "https://example.com/profile", "identity": {"platform": "instagram", "platform_id": "<verified-native-id-string>"}},
+    "<topics-column-id>": ["<evidence-based category>"],
     "<channel-column-id>": {"platform": "instagram", "url": "https://example.com/profile"},
     "<match-column-id>": {"level": "good", "reason": "<developed evidence-based evaluation paragraph>"}
   }}]
@@ -102,7 +107,9 @@ The database does not enforce entity uniqueness within or across tables. The cal
 
 ## Import and source-linked leads
 
-File import belongs to the Web panel: download a blank template, preview CSV/XLSX, map fields and confirm. Current structured workbooks preserve complete objects and contact arrays. Older OneCrew workbooks or unsuitable layouts enter ordinary Excel mapping with a format notice. MCP has no file-import tool; use the existing batched table writes for agent-maintained data.
+File import belongs to the Web panel: download a blank template or select a CSV/XLSX file and import. Current structured workbooks preserve complete objects and arrays. Ordinary Excel and older formats retain their source columns. MCP has no file-import tool; use the existing batched table writes for agent-maintained data.
+
+Saving a lead requires a valid nonempty `people` value in the first Creator field. Plain-text name columns do not qualify. Email is optional when saving a lead; contacting a lead requires an email. Platform, exact topic tag and contact-status filters apply to all saved leads. Keep the same filters when following `next_cursor`.
 
 Use `leads_add` with one table_id and 1–100 actual record_ids to save selected sources; repeating a source is idempotent. `leads_list` and `leads_get` read current source values. Two source rows remain two leads even when their person or email matches. Multiple platforms already present in one source row remain together; profile and followers values group by their explicit platform. No email is required to save a lead.
 

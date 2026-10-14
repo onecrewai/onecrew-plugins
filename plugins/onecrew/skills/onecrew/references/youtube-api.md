@@ -46,15 +46,16 @@ The calling agent performs the evaluation. The search service returns factual ev
 
 ## Default format for a new creator table
 
-Read [Dynamic tables](dynamic-tables.md) before writing. When creating a new creator result table is appropriate, use these three columns by default:
+Read [Dynamic tables](dynamic-tables.md) before writing. When creating a new creator result table is appropriate, use these four columns by default:
 
 | Column  | Type    | Value                                                                                            |
 | ------- | ------- | ------------------------------------------------------------------------------------------------ |
 | Creator | people  | `{name, image_url?, identity: {platform: "youtube", platform_id}}`; name and avatar share a cell |
+| Content topics | topics | 1–2 short category tags from the actual profile and video evidence; `[]` when unknown |
 | Profile | profile | `{platform: "youtube", url: <returned channel homepage>}`; never a video or guessed handle URL  |
 | Score   | score   | `{level, reason}`; rating badge and hover explanation, or `null` for insufficient evidence       |
 
-Keep this column order. Specialized titles are fixed and localized by OneCrew as Creator/Profile/Score or 达人/平台主页/评分; callers cannot rename them. An explicitly brand-only list may use `company` instead of `people`. Preserve the native `platform_id`; never substitute a name, handle, or URL. Reuse an existing row when the target table already contains that entity.
+Keep this column order. Specialized titles are fixed and localized by OneCrew as Creator/Content topics/Profile/Score or 达人/内容领域/平台主页/评分; callers cannot rename them. An explicitly brand-only list may use `company` instead of `people`. Preserve the native `platform_id`; never substitute a name, handle, or URL. Reuse an existing row when the target table already contains that entity.
 
 Unless the user requests them, do not add separate avatar, biography, subscriber count, matching-video, evaluation-text, source, or retrieval-date columns. Evidence supports evaluation and the reply; it does not automatically become table columns.
 
