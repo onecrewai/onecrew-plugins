@@ -25,6 +25,6 @@ Prefer original sources for factual claims and cite the exact source URLs. Disti
 
 Report `requires_rendering` when HTTP content needs JavaScript, `login_required` for login, `content_locked` for permission gates, `blocked` for access checks and `rate_limited` for rate limits. Stop the affected request; changing entry points or queries must not be used to evade an access check. A public article URL subsequently supplied by the user is an independent input and may be read directly, subject to that page's access restrictions. Locked links and failed or partial source reads leave the missing information unresolved.
 
-For creator discovery use the platform search tools.
+For creator discovery use native platform search where supported. Other platforms may be researched through verified public profile and content pages; follow the OneCrew skill's creator discovery and dynamic-table rules when the user requests saving results.
 
 Web research does not automatically create tables, write records or send messages. Perform those actions only within the user's requested workflow and follow the OneCrew skill's relevant reference.

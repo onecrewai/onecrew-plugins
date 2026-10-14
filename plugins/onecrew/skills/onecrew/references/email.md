@@ -14,6 +14,8 @@ Use `mail_preview` to inspect sender, exact recipients, rendered content and att
 
 The only template placeholder is `{{name}}`. OneCrew reads the selected lead's Creator name for each recipient. Inspect every personalized message in the batch preview. Applying a template changes its subject, body and attachments; it does not change selected recipients. A lead without an email cannot be added as a recipient. The Web panel, MCP and HTTP use the same recipient validation and renderer.
 
+Normally omit `variables`: the service supplies the Creator name. If retaining a previewed `variables.name` for sending, it must still match the current source; a changed name requires a new preview. Replies use the same source name rule.
+
 ## Synchronize replies
 
 Call `mail_sync_create` once to synchronize all connected receiving mailboxes, or pass `connection_id` to select one mailbox. Omit `request_id` for a new sync; reuse it only when retrying that same request. Poll `mail_sync_status` using the returned `poll_after_ms` until terminal status. Do not create one sync per message or conversation.

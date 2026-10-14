@@ -2,6 +2,8 @@
 
 Use `platform_connection_list` for supported platforms and saved connection state. Setup and live account verification belong in the Web Accounts panel at `connect_url`.
 
+Use native platform search where supported. For other platforms, use verified public profile and content pages through the webpage research workflow when OneCrew is explicitly invoked. Apply the same screening, tags, rating and fixed table fields below. Omit unavailable native IDs; never invent them or merge people by a matching handle.
+
 ## Search, screen, assess, save
 
 1. Keep the conversation target table and user criteria. Do not create a new result table before knowing whether any candidates will be saved.
