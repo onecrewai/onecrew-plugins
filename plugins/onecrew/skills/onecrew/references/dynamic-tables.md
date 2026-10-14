@@ -26,15 +26,17 @@ Create only requested or task-required business columns. Unless explicitly reque
 | people | `{name, image_url?, url?, identity?}` | People and individual creators; name and avatar share one cell |
 | company | `{name, image_url?, url?, identity?}` | Companies, brands, and organizations; name and logo share one cell |
 | website | HTTP(S) URL string | A separately displayed website link |
-| email | Email address string | Email addresses |
-| telephone | Telephone number string | Contact numbers |
+| profile | `{platform, url}` | Account homepage with a required platform |
+| followers | `{platform, count}` | Platform audience count; nonnegative safe integer or null |
+| email | Array of email address strings, at most 20 | Ordered contact addresses |
+| telephone | Array of telephone strings, at most 20 | Ordered contact numbers |
 | score | `{level, reason?}` | Rating badge with the reason shown on hover |
 
-A `website` cell takes the URL string alone, never the `people`/`company` object. All types accept `null` for unknown values. `people` and `company` require a nonempty `name`; their URL fields are optional and must use HTTP or HTTPS. Supply an actual known image URL for `image_url`, not a homepage or an invented avatar URL.
+A `website` cell takes the URL string alone, never a profile or entity object. A `profile` URL must use HTTP(S). Both `profile` and `followers` require `platform`: an open string of 1–64 characters, normalized to lowercase, not restricted to connected platforms. Use verified complete follower numbers; abbreviated text is not an exact count. All types accept `null` for unknown values. Email/telephone arrays preserve order and duplicates; `[]` is empty. `people` and `company` require a nonempty `name`; their URL fields are optional and must use HTTP or HTTPS. Supply an actual known image URL for `image_url`, not a homepage or an invented avatar URL.
 
 ### Prefer rich cells
 
-Use `people` or `company` for entity details. Keep the name and avatar/logo in the same object rather than splitting them into text and image-link columns. New creator search tables default to three columns in order: Name (`people`), Profile (`website`), and Match (`score`). Localize the labels to the user's language; use 名称、主页、匹配度 in Chinese. An explicitly brand-only list may use `company` instead of `people`. Preserve an existing target table's schema unless the user requests changes.
+Use `people` or `company` for entity details. Keep the name and avatar/logo in the same object. New creator search tables default to three columns in order: `people`, `profile`, `score`. Specialized titles are fixed and localized: Creator/Profile/Score or 达人/平台主页/评分; repeated types receive numbered titles. The same rule applies to company, website, followers, email and telephone. General-purpose columns keep their names and may be renamed with `table_rename_column`; tables may be renamed with `table_rename`. An explicitly brand-only list may use `company` instead of `people`. Preserve an existing target table's schema unless the user requests changes.
 
 Profile is the actual account or channel homepage. Use a handle URL only when verified by the source; do not invent a handle, substitute a video URL, or add a second source column. The entity's native identity stays in the Name cell for matching records. Missing avatars or evaluations remain absent or `null` without changing this default structure.
 
@@ -69,8 +71,8 @@ When a new table is appropriate:
   "name": "Creator shortlist",
   "columns": [
     {"name": "Creator", "data_type": "people"},
-    {"name": "Channel link", "data_type": "website"},
-    {"name": "Match", "data_type": "score"}
+    {"name": "Profile", "data_type": "profile"},
+    {"name": "Score", "data_type": "score"}
   ]
 }
 ```
@@ -82,7 +84,7 @@ The following illustrates the value format only. Replace placeholder IDs with to
   "table_id": "<returned-table-id>",
   "rows": [{"values": {
     "<creator-column-id>": {"name": "Example creator", "image_url": "https://example.com/avatar.png", "url": "https://example.com/profile", "identity": {"platform": "instagram", "platform_id": "<verified-native-id-string>"}},
-    "<channel-column-id>": "https://example.com/profile",
+    "<channel-column-id>": {"platform": "instagram", "url": "https://example.com/profile"},
     "<match-column-id>": {"level": "good", "reason": "<developed evidence-based evaluation paragraph>"}
   }}]
 }
@@ -94,6 +96,14 @@ Do not save example URLs or values as real records. Omit unknown image URLs and 
 
 `people` and `company` support `identity: {platform, platform_id}`. When a search result supplies a native ID, save identity on the first write, with platform_id as a string even beyond JavaScript safe integer range; for YouTube results, use `platform: "youtube"` and the returned `platform_id`. Store identity with the name, avatar, and URL in the rich cell, not in another platform-ID column.
 
-The grid stays compact; the people/company editor displays platform and a copyable native ID as read-only information. Identity is also returned when reading records. Omit it when manually entered data has no reliable identity; never infer native IDs from names, handles, or URLs. Preserve an existing identity when editing the rich cell unless intentionally replacing the entity.
+The Web grid and complete cell details are read-only, including the copyable native ID. Maintain records through MCP. Identity is returned when reading records; omit it when no reliable identity is available. Never infer native IDs from names, handles, or URLs. Preserve an existing identity when updating the rich cell unless intentionally replacing the entity.
 
 The database does not enforce entity uniqueness within or across tables. The caller must inspect existing identities and choose update versus append; do not assume automatic deduplication.
+
+## Import and source-linked leads
+
+File import belongs to the Web panel: download a blank template, preview CSV/XLSX, map fields and confirm. Current structured workbooks preserve complete objects and contact arrays. Older OneCrew workbooks or unsuitable layouts enter ordinary Excel mapping with a format notice. MCP has no file-import tool; use the existing batched table writes for agent-maintained data.
+
+Use `leads_add` with one table_id and 1–100 actual record_ids to save selected sources; repeating a source is idempotent. `leads_list` and `leads_get` read current source values. Two source rows remain two leads even when their person or email matches. Multiple platforms already present in one source row remain together; profile and followers values group by their explicit platform. No email is required to save a lead.
+
+`leads_remove` removes relationships, not source records or mail history. Unclaimed queued sends for removed leads fail; claimed submissions may still finish. Re-adding produces a new lead_id. For contact selection and source-owned conversation history, read [Email workflows](email.md).
