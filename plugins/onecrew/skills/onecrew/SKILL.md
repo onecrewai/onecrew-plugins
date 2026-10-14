@@ -25,7 +25,7 @@ For requested contacts, read [Profile contact enrichment](references/platform-en
 
 Use `onecrew-web-research` and OneCrew's `web_search` / `web_extract` only when the user explicitly names OneCrew or selects its plugin in this conversation. General web requests and installed tools alone do not trigger these OneCrew tools. Other available web tools remain available.
 
-For saving source rows as leads, read [Dynamic tables](references/dynamic-tables.md). Source rows remain independent across tables; the lead library displays their current values without merging people.
+For saving source rows as leads and maintaining their contact status or next follow-up, read [Dynamic tables](references/dynamic-tables.md). Source rows remain independent across tables; the lead library displays their current values without merging people.
 
 For selecting lead contacts, drafts, sending, mailbox synchronization, source-owned history, and replies, read [Email workflows](references/email.md).
 

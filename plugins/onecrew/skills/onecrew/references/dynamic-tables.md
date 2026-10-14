@@ -111,6 +111,8 @@ File import belongs to the Web panel: download a blank template or select a CSV/
 
 Saving a lead requires a valid nonempty `people` value in the first Creator field. Plain-text name columns do not qualify. Email is optional when saving a lead; contacting a lead requires an email. Platform, exact topic tag and contact-status filters apply to all saved leads. Keep the same filters when following `next_cursor`.
 
+Maintain manual contact status with `leads_set_contact_status({lead_id,status})`: `uncontacted`, `contacted`, or `null` to use mail facts again. Real pending replies remain visible and take precedence. Maintain the next follow-up with `leads_set_followup({lead_id,followup:{note,due_at?}})`; a supplied due_at must include its timezone. Use `followup:null` to clear it. These are source-specific planning fields, displayed read-only in the lead library; they do not send or schedule mail or change the source table.
+
 Use `leads_add` with one table_id and 1–100 actual record_ids to save selected sources; repeating a source is idempotent. `leads_list` and `leads_get` read current source values. Two source rows remain two leads even when their person or email matches. Multiple platforms already present in one source row remain together; profile and followers values group by their explicit platform. No email is required to save a lead.
 
 `leads_remove` removes relationships, not source records or mail history. Unclaimed queued sends for removed leads fail; claimed submissions may still finish. Re-adding produces a new lead_id. For contact selection and source-owned conversation history, read [Email workflows](email.md).
