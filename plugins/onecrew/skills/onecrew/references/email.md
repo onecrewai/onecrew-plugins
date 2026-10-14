@@ -28,7 +28,7 @@ Gmail and SMTP/IMAP use mailbox changes and checkpoints. SMTP reads INBOX plus t
 
 Use `leads_conversations` for history belonging to a source, with `needs_reply: true` for pending incoming messages. A provider thread may contain several sources, so its participant list and subject do not establish ownership. Pending status is calculated per incoming message from direct reply references and confirmed sending evidence; marking read does not clear it. An email-client reply requires persisted Sent evidence, and never turns a local unknown submission into accepted.
 
-For an unassigned historical message, use `mail_bind_source` only when its source is explicitly established, supplying message_id, lead_id and the actual participant contact_email. It persists attribution and advances cached related candidates without starting a remote sync. A conflicting existing source is rejected; do not guess a person from names or addresses.
+Unassigned historical messages are read-only. Start a new conversation from a saved lead with a current email candidate. Existing source assignments and reference-based replies remain available; do not guess a person from names or addresses.
 
 ## Read and reply
 
