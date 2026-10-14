@@ -50,13 +50,15 @@ Read [Dynamic tables](dynamic-tables.md) before writing. When creating a new cre
 
 | Column  | Type    | Value                                                                                            |
 | ------- | ------- | ------------------------------------------------------------------------------------------------ |
-| Name    | people  | `{name, image_url?, identity: {platform: "youtube", platform_id}}`; name and avatar share a cell |
-| Profile | website | Returned channel homepage URL; never a matching-video URL or guessed handle URL                  |
-| Match   | score   | `{level, reason}`; rating badge and hover explanation, or `null` for insufficient evidence       |
+| Creator | people  | `{name, image_url?, identity: {platform: "youtube", platform_id}}`; name and avatar share a cell |
+| Profile | profile | `{platform: "youtube", url: <returned channel homepage>}`; never a video or guessed handle URL  |
+| Score   | score   | `{level, reason}`; rating badge and hover explanation, or `null` for insufficient evidence       |
 
-Keep this column order and localize the labels; use 名称、主页、匹配度 in Chinese. An explicitly brand-only list may use `company` instead of `people`. Preserve the native `platform_id`; never substitute a name, handle, or URL. Reuse an existing row when the target table already contains that entity.
+Keep this column order. Specialized titles are fixed and localized by OneCrew as Creator/Profile/Score or 达人/平台主页/评分; callers cannot rename them. An explicitly brand-only list may use `company` instead of `people`. Preserve the native `platform_id`; never substitute a name, handle, or URL. Reuse an existing row when the target table already contains that entity.
 
 Unless the user requests them, do not add separate avatar, biography, subscriber count, matching-video, evaluation-text, source, or retrieval-date columns. Evidence supports evaluation and the reply; it does not automatically become table columns.
+
+When follower counts are requested, use `followers` with `{platform: "youtube", count}`. Save only a verified complete nonnegative safe integer; unknown or abbreviated subscriber text means count is null. Retain the source precision and do not invent exact digits.
 
 Use real tool-returned column IDs. Report saving only after confirmed row writes, with the exact `web_url` and actual counts. A completed search or empty table alone does not mean records were saved.
 
