@@ -12,6 +12,8 @@ Call `mail_recipient_candidates` with the selected lead_ids, then choose an actu
 
 Use `mail_preview` to inspect sender, exact recipients, rendered content and attachments. Send only with user-authorized recipients and content using `mail_send_create`; retain request_id and poll the same batch_id with `mail_send_status`, then read `mail_send_fetch`. accepted means provider acceptance, not delivery. unknown may already have been sent; never recreate or blindly resume it. `mail_send_resume` applies only to unsubmitted items in the same paused request.
 
+The only template placeholder is `{{name}}`. OneCrew reads the selected lead's Creator name for each recipient. Inspect every personalized message in the batch preview. Applying a template changes its subject, body and attachments; it does not change selected recipients. A lead without an email cannot be added as a recipient. The Web panel, MCP and HTTP use the same recipient validation and renderer.
+
 ## Synchronize replies
 
 Call `mail_sync_create` once to synchronize all connected receiving mailboxes, or pass `connection_id` to select one mailbox. Omit `request_id` for a new sync; reuse it only when retrying that same request. Poll `mail_sync_status` using the returned `poll_after_ms` until terminal status. Do not create one sync per message or conversation.
