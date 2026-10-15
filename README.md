@@ -2,6 +2,8 @@
 
 OneCrew plugin marketplace for Codex. Includes the OneCrew and OneCrew web research skills. Install and start the OneCrew application before using the plugin.
 
+For agents installing OneCrew Pro or connecting WorkBuddy and other MCP clients, read [Agent setup and shared Skill workflows](docs/agent-setup.md).
+
 ## Install
 
 ```sh
