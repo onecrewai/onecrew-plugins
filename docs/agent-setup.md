@@ -19,7 +19,7 @@ Expand `~` and `%LOCALAPPDATA%` on the target computer before writing client con
 | --- | --- |
 | Executable absent | Install Pro. Preserve any existing files in its data directory. |
 | Executable present, update required | Verify its version and follow the release guide to update it using the same data directory. |
-| Required version already installed | Check the service and continue with client setup. |
+| Required version already installed | Skip download and replacement. Run `status`; run `start` only when the service is stopped. Continue with client setup. |
 
 A first installation does not require an old account or login. The user signs in after the service starts. OneCrew Pro is distributed as a standalone application; its presence is not determined by Node, Python or npm package inventories.
 
@@ -31,15 +31,19 @@ Use the computer and AI client selected by the user. Ask only when either is unk
 - Account and installation guides: <https://access.onecrewai.io>
 - Plugin and skill source: <https://github.com/onecrewai/onecrew-plugins>
 
-The user's private Access link returns Markdown. Read it with the terminal HTTP command provided alongside the link, require HTTP 200, and review the package URL, size, SHA-256 and installation commands before execution. Keep the private token out of public searches and reports. Do not pipe the response into a shell or `Invoke-Expression`.
+Access provides public fixed Markdown guides for Mac and Windows. Each guide reads the currently configured release and lists versioned ZIP URLs. These links can be shared and have no account token or expiry. Read the user's guide with its terminal HTTP command, require HTTP 200, and review the package URL, size, SHA-256 and installation commands before execution. Read the response as instructions; execute only the commands for the selected operating system.
 
-Follow the release guide and the client's tool approvals. Report the specific step and error when permission, download or verification fails. Once those checks pass, continue the requested installation; an environment inventory alone does not complete it.
+Follow this order: check the installed version, download and verify when needed, install, start the service, configure the client, and verify a live MCP call. Complete each dependent step before starting the next.
+
+An absent application selects installation; a stopped service selects startup. Stop when a required installation-guide step fails or tool permission is denied, and report that step and its error. When user sign-in, browser authorization or a client restart is required, pause at that step and state what remains to be verified.
 
 Verify application and plugin versions separately against the release record. Use its recorded source commit for skills and references. Start the application with the same data directory that the MCP connection will use.
 
 ## Codex
 
 For a Codex target, follow the [plugin installation and update instructions](../plugins/onecrew/skills/onecrew/references/plugin-update.md). The plugin provides its MCP launcher and skills. Keep a single OneCrew connection to the service.
+
+Run `codex plugin marketplace list` before adding a marketplace. Add `onecrew` only when it is absent. Check `codex plugin list --marketplace onecrew --json`; if the release's companion version is already installed, continue to the live MCP check. Otherwise follow the release guide's refresh and install steps, then verify the resulting version. A mismatch must be reported before using that plugin with the release.
 
 Preserve explicitly selected development sources, pinned refs and unrelated client settings. Reload or start a new Codex conversation as required, then verify a live OneCrew tool call.
 
