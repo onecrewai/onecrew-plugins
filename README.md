@@ -11,15 +11,10 @@ codex plugin marketplace add onecrewai/onecrew-plugins
 codex plugin add onecrew@onecrew
 ```
 
-Use Codex and OneCrew on the same computer. Start a new Codex conversation after installation.
+Use Codex and OneCrew on the same computer. Select your operating system and installation method on the [Pro installation page](https://onecrewai.io/en/product/onecrew-pro#install), then start a new Codex conversation after plugin installation.
 
 If you previously added OneCrew from a local folder, run `codex plugin marketplace remove onecrew` before adding this GitHub source. Your OneCrew data is kept.
 
 ## Update
 
-```sh
-codex plugin marketplace upgrade onecrew
-codex plugin add onecrew@onecrew
-```
-
-Start a new conversation after updating. Update the OneCrew application separately.
+Follow [Plugin updates](plugins/onecrew/skills/onecrew/references/plugin-update.md) to select the published source and verify the installed files. Start a new conversation after updating. Update the OneCrew application separately with the version selected by Access.
