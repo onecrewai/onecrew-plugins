@@ -3,6 +3,8 @@ set -eu
 
 if [ -n "${ONECREW_BINARY:-}" ]; then
   executable=$ONECREW_BINARY
+elif executable=$(command -v onecrew-pro); then
+  :
 else
   if [ -z "${HOME:-}" ]; then
     printf '%s\n' 'OneCrew could not locate your home directory.' >&2
@@ -16,7 +18,7 @@ case "$executable" in
   *) printf '%s\n' 'ONECREW_BINARY must be an absolute executable path.' >&2; exit 64 ;;
 esac
 if [ ! -f "$executable" ] || [ ! -x "$executable" ]; then
-  printf '%s\n' 'OneCrew is not installed at the configured location. Run the OneCrew installer, or set ONECREW_BINARY to its absolute path.' >&2
+  printf '%s\n' 'OneCrew is not installed at the configured location. Install @onecrew/pro, or set ONECREW_BINARY to its absolute native executable path.' >&2
   exit 127
 fi
 

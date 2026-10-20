@@ -1,19 +1,19 @@
 # OneCrew Pro: Agent Setup
 
-Use this guide to install OneCrew Pro or connect it to an AI client. The application is installed under **OneCrewConnect**. This repository supplies the Codex adapter and shared skills. Any compatible client connected to the same OneCrew MCP service can read these skills and follow the same workflows.
+Use this guide to install OneCrew Pro or connect it to an AI client. Pro supports ZIP and npm installation. Follow the operating system and installation method selected in the user's prompt. Both methods use the same **OneCrewConnect** data directory. This repository supplies the Codex adapter and shared skills. Any compatible client connected to the same OneCrew MCP service can read these skills and follow the same workflows.
 
 For OneCrew Lite or a legacy OneCrew release, use that product's own installation guide.
 
 ## Locate the current application
 
-Use these paths on the target computer unless the user has specified a custom Pro installation:
+For npm, locate **onecrew-pro** with `command -v onecrew-pro` on Mac or `Get-Command onecrew-pro.cmd` in PowerShell. `onecrew-pro --print-binary-path` returns its native executable. For ZIP, use the paths below. Check any explicit `ONECREW_BINARY` setting against the selected installation.
 
 | System | Executable | Data directory |
 | --- | --- | --- |
 | macOS | `~/Applications/OneCrewConnect/onecrew` | `~/Library/Application Support/OneCrewConnect` |
 | Windows | `%LOCALAPPDATA%\Programs\OneCrewConnect\onecrew.exe` | `%LOCALAPPDATA%\OneCrewConnect` |
 
-Expand `~` and `%LOCALAPPDATA%` on the target computer before writing client configuration. Use the resulting absolute executable path. A different `onecrew` on PATH, an older OneCrew directory, or a global npm package does not identify this Pro installation. Leave older products and their data unchanged; this procedure does not migrate them.
+Expand `~` and `%LOCALAPPDATA%` on the target computer before writing client configuration. Use the actual absolute executable path. The npm command is `onecrew-pro`; the older Rust CLI's `onecrew` command is a separate product. Keep the same OneCrewConnect data directory when moving a Pro ZIP installation to npm.
 
 | State at the resolved Pro path | Action |
 | --- | --- |
@@ -21,7 +21,7 @@ Expand `~` and `%LOCALAPPDATA%` on the target computer before writing client con
 | Executable present, update required | Verify its version and follow the release guide to update it using the same data directory. |
 | Required version already installed | Skip download and replacement. Run `status`; run `start` only when the service is stopped. Continue with client setup. |
 
-A first installation does not require an old account or login. The user signs in after the service starts. OneCrew Pro is distributed as a standalone application; its presence is not determined by Node, Python or npm package inventories.
+A first installation does not require an old account or login. The user signs in after the service starts. Node.js and npm are needed for the npm installation and command. Each platform package includes the compiled application and its runtime.
 
 Use the computer and AI client selected by the user. Ask only when either is unknown or inaccessible. System information from a remote sandbox describes that sandbox.
 
@@ -31,11 +31,16 @@ Use the computer and AI client selected by the user. Ask only when either is unk
 - Account and installation guides: <https://access.onecrewai.io>
 - Plugin and skill source: <https://github.com/onecrewai/onecrew-plugins>
 
-Access provides public fixed Markdown guides for Mac and Windows. Each guide reads the currently configured release and lists versioned ZIP URLs. These links can be shared and have no account token or expiry. Read the user's guide with its terminal HTTP command, require HTTP 200, and review the package URL, size, SHA-256 and installation commands before execution. Read the response as instructions; execute only the commands for the selected operating system.
+Access provides a fixed Markdown guide for each operating system and installation method. Read the URL in the user's prompt with its terminal HTTP command and require HTTP 200. Keep the selected method. Each guide names the current binary and plugin releases.
 
-Before requests, inspect process proxy variables and the user's system proxy settings without printing credentials. Use the actual enabled proxy address and port, respecting bypass/PAC decisions. With TUN alone, retain the existing route. Preserve proxy rules, mode and node selection. Use `curl` on Mac and `Invoke-WebRequest` on Windows. For a DNS, connection or TLS-handshake failure, retry once with `curl -4`; on Windows, first check `Get-Command curl.exe`, then use `curl.exe -4` with the same resolved proxy settings. Keep certificate verification enabled and redirects disabled. Require HTTP 200, then verify ZIP size and SHA-256. Report a failed or unavailable retry; stop immediately on HTTP errors, failed verification or denied permission.
+| Method | Install and update |
+| --- | --- |
+| ZIP | Download the matching platform archive, verify size and SHA-256, extract, stop the service, and replace files at the ZIP path. The archive includes its runtime. |
+| npm | Check Node.js and npm, stop the service, then install the guide's exact `@onecrew/pro` version. Keep optional dependencies enabled. npm selects the matching platform package and verifies integrity. |
 
-Follow this order: check the installed version, download and verify when needed, install, start the service, configure the client, and verify a live MCP call. Complete each dependent step before starting the next.
+Before requests, inspect process proxy variables and the user's system proxy settings without printing credentials. Use the actual enabled proxy address and port, respecting bypass/PAC decisions. With TUN alone, retain the existing route. Preserve proxy rules, mode and node selection. Use `curl` on Mac and `Invoke-WebRequest` on Windows for guides. For a DNS, connection or TLS-handshake failure, retry once with `curl -4`; on Windows, first check `Get-Command curl.exe`, then use `curl.exe -4` with the same resolved proxy settings. Keep certificate verification enabled and redirects disabled. Preserve explicit [npm proxy settings](https://docs.npmjs.com/cli/using-npm/config/#https-proxy). When npm has none, carry the system proxy's actual URL into `npm_config_https_proxy` and `npm_config_proxy` for this installation, retaining `NO_PROXY`. With TUN alone, keep the existing route. Report npm errors directly.
+
+After installation, start the service with the existing data directory, verify its actual version, configure the client, and verify a live MCP call. When the selected installation already has the required version, keep its files and start only if needed. Complete each dependent step before starting the next.
 
 An absent application selects installation; a stopped service selects startup. After the permitted connection retry, stop on any remaining failure and report the step and error. When user sign-in, browser authorization or a client restart is required, pause at that step and state what remains to be verified.
 
@@ -44,6 +49,8 @@ Verify application and plugin versions separately against the current Access gui
 ## Codex
 
 For a Codex target, follow the [plugin installation and update instructions](../plugins/onecrew/skills/onecrew/references/plugin-update.md). The plugin provides its MCP launcher and skills. Keep a single OneCrew connection to the service.
+
+Set `ONECREW_BINARY` in the client's environment to the selected installation's absolute native path. Use the ZIP path or the result of `onecrew-pro --print-binary-path` for npm. Update that setting when the user changes installation methods. The launcher also discovers `onecrew-pro` on PATH or the standard ZIP path when no explicit path is configured. A selected program that fails must be reported before switching installations.
 
 Select the Access guide's source commit through the Codex CLI, following the plugin update instructions. Install the plugin and verify its version and updated files.
 
@@ -54,7 +61,7 @@ Preserve local development sources, other repositories, versions the user explic
 Use the target client's own MCP configuration. Codex is not a dependency for this route. The skills' Codex plugin installation and update instructions apply only to Codex.
 
 1. Run the resolved Pro executable with `status`. If the service is stopped, follow the application guide to run `start`. Use the actual URL and data directory it reports.
-2. For local stdio MCP, set `command` to the absolute executable path in the table above and `args` to `["mcp"]`. For a custom data directory, use `["mcp", "--data-dir", "ABSOLUTE_DATA_DIRECTORY"]`, replacing the last value with the actual Pro data path. Keep paths containing spaces as single values.
+2. For local stdio MCP, set `command` to the absolute native path returned by `onecrew-pro --print-binary-path` and `args` to `["mcp"]`. For a ZIP installation, use its installed binary. For a custom data directory, use `["mcp", "--data-dir", "ABSOLUTE_DATA_DIRECTORY"]`, replacing the last value with the actual Pro data path. Keep paths containing spaces as single values.
 3. Let the client start and manage the stdio bridge. `start` runs the independent application service; `mcp` connects to it and does not install skills, perform login or start the service.
 4. A client supporting Streamable HTTP can instead connect to the actual service URL plus `/mcp`. Choose one transport per client. A saved HTTP URL must be updated if the service port changes.
 5. Reload the client's tools and make a real OneCrew `account` status call using the current tool schema. Let the user complete the returned authorization flow if login is required.

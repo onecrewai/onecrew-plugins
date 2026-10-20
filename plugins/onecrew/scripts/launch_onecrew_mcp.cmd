@@ -4,6 +4,8 @@ setlocal DisableDelayedExpansion
 if defined ONECREW_BINARY (
   set "ONECREW_MCP_EXE=%ONECREW_BINARY%"
 ) else (
+  for %%I in (onecrew-pro.cmd) do set "ONECREW_NPM_CMD=%%~$PATH:I"
+  if defined ONECREW_NPM_CMD goto npm
   if not defined LOCALAPPDATA goto missing
   set "ONECREW_MCP_EXE=%LOCALAPPDATA%\Programs\OneCrewConnect\onecrew.exe"
 )
@@ -17,9 +19,15 @@ if errorlevel 1 exit /b 1
 "%ONECREW_MCP_EXE%" mcp
 exit /b %ERRORLEVEL%
 
+:npm
+cd /d "%SystemRoot%"
+if errorlevel 1 exit /b 1
+call "%ONECREW_NPM_CMD%" mcp
+exit /b %ERRORLEVEL%
+
 :invalid
 echo ONECREW_BINARY must be an absolute executable path. 1>&2
 exit /b 64
 :missing
-echo OneCrew is not installed at the configured location. Run the OneCrew installer, or set ONECREW_BINARY to its absolute path. 1>&2
+echo OneCrew is not installed at the configured location. Install @onecrew/pro, or set ONECREW_BINARY to its absolute native executable path. 1>&2
 exit /b 127

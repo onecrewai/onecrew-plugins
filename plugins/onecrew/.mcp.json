@@ -12,6 +12,7 @@
         "SYSTEMROOT",
         "COMSPEC",
         "PATHEXT",
+        "PATH",
         "ONECREW_BINARY",
         "ONECREW_DATA_DIR"
       ]
