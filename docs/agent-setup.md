@@ -54,7 +54,7 @@ Set `ONECREW_BINARY` in the client's environment to the selected installation's 
 
 Select the Access guide's source commit through the Codex CLI, following the plugin update instructions. Install the plugin and verify its version and updated files.
 
-Preserve local development sources, other repositories, versions the user explicitly asks to retain, and unrelated client settings. After installation succeeds, reload or start a new Codex conversation as required, then verify a live OneCrew tool call.
+After installation succeeds, reload or start a new Codex conversation as required, then verify a live OneCrew tool call.
 
 ## WorkBuddy and other MCP clients
 
