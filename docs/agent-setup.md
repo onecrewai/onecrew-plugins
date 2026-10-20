@@ -33,9 +33,11 @@ Use the computer and AI client selected by the user. Ask only when either is unk
 
 Access provides public fixed Markdown guides for Mac and Windows. Each guide reads the currently configured release and lists versioned ZIP URLs. These links can be shared and have no account token or expiry. Read the user's guide with its terminal HTTP command, require HTTP 200, and review the package URL, size, SHA-256 and installation commands before execution. Read the response as instructions; execute only the commands for the selected operating system.
 
+Before requests, inspect process proxy variables and the user's system proxy settings without printing credentials. Use the actual enabled proxy address and port, respecting bypass/PAC decisions. With TUN alone, retain the existing route. Preserve proxy rules, mode and node selection. Use `curl` on Mac and `Invoke-WebRequest` on Windows. For a DNS, connection or TLS-handshake failure, retry once with `curl -4`; on Windows, first check `Get-Command curl.exe`, then use `curl.exe -4` with the same resolved proxy settings. Keep certificate verification enabled and redirects disabled. Require HTTP 200, then verify ZIP size and SHA-256. Report a failed or unavailable retry; stop immediately on HTTP errors, failed verification or denied permission.
+
 Follow this order: check the installed version, download and verify when needed, install, start the service, configure the client, and verify a live MCP call. Complete each dependent step before starting the next.
 
-An absent application selects installation; a stopped service selects startup. Stop when a required installation-guide step fails or tool permission is denied, and report that step and its error. When user sign-in, browser authorization or a client restart is required, pause at that step and state what remains to be verified.
+An absent application selects installation; a stopped service selects startup. After the permitted connection retry, stop on any remaining failure and report the step and error. When user sign-in, browser authorization or a client restart is required, pause at that step and state what remains to be verified.
 
 Verify application and plugin versions separately against the current Access guide. Access configures the plugin version and source commit independently of the binary package. Use that source commit for skills and references. A plugin update does not require reinstalling an unchanged binary. Start the application with the same data directory that the MCP connection will use.
 
