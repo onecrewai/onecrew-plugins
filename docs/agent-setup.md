@@ -43,9 +43,9 @@ Verify application and plugin versions separately against the current Access gui
 
 For a Codex target, follow the [plugin installation and update instructions](../plugins/onecrew/skills/onecrew/references/plugin-update.md). The plugin provides its MCP launcher and skills. Keep a single OneCrew connection to the service.
 
-Run `codex plugin marketplace list` before adding a marketplace. Add `onecrew` only when it is absent. Check `codex plugin list --marketplace onecrew --json`; if the Access guide's plugin version is already installed, continue to the live MCP check. Otherwise follow the guide's refresh and install steps, then verify the resulting version. Report a version mismatch before continuing client setup.
+Inspect the marketplace source and its checked-out commit as described in the plugin update instructions. An official OneCrew source pinned by an earlier installation must move to the Access guide's current source commit when updating. Refreshing an old pinned ref keeps the old plugin. Replace that source registration through the Codex CLI, install the plugin, and verify both its version and updated files.
 
-Preserve explicitly selected development sources, pinned refs and unrelated client settings. Reload or start a new Codex conversation as required, then verify a live OneCrew tool call.
+Preserve local development sources, other repositories, versions the user explicitly asks to retain, and unrelated client settings. After installation succeeds, reload or start a new Codex conversation as required, then verify a live OneCrew tool call. Starting a new conversation does not change an older installed plugin version.
 
 ## WorkBuddy and other MCP clients
 
