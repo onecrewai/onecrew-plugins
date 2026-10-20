@@ -37,13 +37,13 @@ Follow this order: check the installed version, download and verify when needed,
 
 An absent application selects installation; a stopped service selects startup. Stop when a required installation-guide step fails or tool permission is denied, and report that step and its error. When user sign-in, browser authorization or a client restart is required, pause at that step and state what remains to be verified.
 
-Verify application and plugin versions separately against the release record. Use its recorded source commit for skills and references. Start the application with the same data directory that the MCP connection will use.
+Verify application and plugin versions separately against the current Access guide. Access configures the plugin version and source commit independently of the binary package. Use that source commit for skills and references. A plugin update does not require reinstalling an unchanged binary. Start the application with the same data directory that the MCP connection will use.
 
 ## Codex
 
 For a Codex target, follow the [plugin installation and update instructions](../plugins/onecrew/skills/onecrew/references/plugin-update.md). The plugin provides its MCP launcher and skills. Keep a single OneCrew connection to the service.
 
-Run `codex plugin marketplace list` before adding a marketplace. Add `onecrew` only when it is absent. Check `codex plugin list --marketplace onecrew --json`; if the release's companion version is already installed, continue to the live MCP check. Otherwise follow the release guide's refresh and install steps, then verify the resulting version. A mismatch must be reported before using that plugin with the release.
+Run `codex plugin marketplace list` before adding a marketplace. Add `onecrew` only when it is absent. Check `codex plugin list --marketplace onecrew --json`; if the Access guide's plugin version is already installed, continue to the live MCP check. Otherwise follow the guide's refresh and install steps, then verify the resulting version. Report a version mismatch before continuing client setup.
 
 Preserve explicitly selected development sources, pinned refs and unrelated client settings. Reload or start a new Codex conversation as required, then verify a live OneCrew tool call.
 
