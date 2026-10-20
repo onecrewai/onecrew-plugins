@@ -16,6 +16,14 @@ The only template placeholder is `{{name}}`. OneCrew reads the selected lead's C
 
 Normally omit `variables`: the service supplies the Creator name. If retaining a previewed `variables.name` for sending, it must still match the current source; a changed name requires a new preview. Replies use the same source name rule.
 
+## Attach local files
+
+In OneCrew Pro 0.1.9 or later, call `mail_attachment_add` with `file_path` for each user-selected file. Use an absolute path on the computer running OneCrew, including a drive letter on Windows. A URL, relative path, or path in a different agent's sandbox will not work. If the tool is absent, update OneCrew Pro before using this workflow.
+
+The tool copies a non-empty regular file into the signed-in account and returns `attachment_id`, filename, content type, size, and SHA-256. Importing a file does not send it. Reuse the returned ID in `attachment_ids` when saving a draft or template, composing a content message, or replying. Import once and reuse the ID across recipients.
+
+Each file and the combined attachments in one email must fit within 20 MiB. Review the returned filenames and sizes, then confirm that `mail_preview` contains the intended attachment IDs, recipients, and content before `mail_send_create`. Existing send authorization still applies. Received-mail attachment metadata is not a downloadable file or a sendable attachment ID.
+
 ## Synchronize replies
 
 Call `mail_sync_create` once to synchronize all connected receiving mailboxes, or pass `connection_id` to select one mailbox. Omit `request_id` for a new sync; reuse it only when retrying that same request. Poll `mail_sync_status` using the returned `poll_after_ms` until terminal status. Do not create one sync per message or conversation.
