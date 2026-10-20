@@ -11,7 +11,7 @@ Run these steps on the computer where the Codex plugin is installed, when the us
    codex plugin list --marketplace onecrew --json
    ```
 
-   Check `marketplaceSource` for the repository; a local `source.path` inside the Git snapshot is normal. The official repository is `onecrewai/onecrew-plugins`. For its Git marketplace, run `git -C <marketplace-root> rev-parse HEAD` using the root returned by the list command. Compare that commit with the guide's source commit. A saved ref may come from an earlier OneCrew installation; preserve an older version only when the user explicitly asks to keep it. Preserve local development sources and other repositories unless the user authorizes replacing them.
+   Identify the official `onecrewai/onecrew-plugins` repository through `marketplaceSource`. Using the returned marketplace root, run `git -C <marketplace-root> rev-parse HEAD` and compare it with the guide's source commit. Preserve local development sources, other repositories, and versions the user explicitly asks to retain.
 
 3. Select the guide's source commit. Replace `SOURCE_COMMIT` below with the actual commit from the guide.
 
@@ -28,7 +28,7 @@ Run these steps on the computer where the Codex plugin is installed, when the us
    codex plugin marketplace add onecrewai/onecrew-plugins --ref SOURCE_COMMIT
    ```
 
-   Run these commands sequentially and stop on failure. If the source already matches, keep it. `marketplace upgrade` refreshes the configured ref; a ref pinned to an older commit still returns that older release. “Already up to date” does not verify the version requested by Access.
+   Keep a matching source. Run dependent commands sequentially and stop on failure.
 
 4. Install the plugin from the selected source and inspect the result:
 
@@ -37,8 +37,8 @@ Run these steps on the computer where the Codex plugin is installed, when the us
    codex plugin list --marketplace onecrew --json
    ```
 
-   Require both commands to report the target version. Use `installedPath` from the install result to check the installed manifest and updated skill files against the selected marketplace source. This also detects revised content published under the same version. A remaining version or file mismatch is an incomplete installation; report the actual source and installed result. Do not uninstall the plugin, delete its cache manually, or edit `config.toml` by hand.
+   Require both commands to report the target version. At the returned `installedPath`, verify the manifest and updated skill files against the selected source. Stop and report any mismatch. Keep unrelated plugins and settings.
 
-After installation is verified, start a new conversation to load the updated skill and tools, then make one read-only live `account` status call. If that requires a new conversation, report it as pending. A new conversation does not upgrade files that are still installed at an older version.
+5. After installation is verified, reload the client or start a new conversation as required, then make one read-only live `account` status call. Report installation and connection results separately, including any pending reload.
 
 CLI marketplace reference: [OpenAI documentation](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli).
