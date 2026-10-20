@@ -11,7 +11,7 @@ Run these steps on the computer where the Codex plugin is installed, when the us
    codex plugin list --marketplace onecrew --json
    ```
 
-   Identify the official `onecrewai/onecrew-plugins` repository through `marketplaceSource`. Using the returned marketplace root, run `git -C <marketplace-root> rev-parse HEAD` and compare it with the guide's source commit. Preserve local development sources, other repositories, and versions the user explicitly asks to retain.
+   Check the `onecrew` registration's `marketplaceSource`. For the official `onecrewai/onecrew-plugins` Git repository, run `git -C <marketplace-root> rev-parse HEAD` using its returned root and compare it with the guide's source commit.
 
 3. Select the guide's source commit. Replace `SOURCE_COMMIT` below with the actual commit from the guide.
 
@@ -21,7 +21,7 @@ Run these steps on the computer where the Codex plugin is installed, when the us
    codex plugin marketplace add onecrewai/onecrew-plugins --ref SOURCE_COMMIT
    ```
 
-   If the official marketplace points to a different commit, replace only its source registration:
+   If the registered repository or commit differs from the guide, replace the `onecrew` registration:
 
    ```sh
    codex plugin marketplace remove onecrew
