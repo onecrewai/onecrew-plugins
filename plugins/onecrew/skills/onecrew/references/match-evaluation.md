@@ -18,7 +18,7 @@ Review the basic profiles and matched evidence returned by search. A confirmed r
 
 If relevance is supported and no required condition has failed, an unknown required attribute may justify saving a null score only when unverified records are acceptable. Name the unknown condition in the reply and exclude the record from fully qualified counts. If the user accepts only verified matches, do not save it. Missing optional information does not prevent a topic rating. Weaker preferences may lower a score without excluding the record; do not mechanically discard all low/null values.
 
-These rules govern new creator search entries. They do not authorize deletion of existing rows or change scoring for other business tasks. An explicit request to save raw candidates can retain unsuitable or uncertain records with accurate explanations. If none are retained, do not create an empty result table or automatically search again to fill the count.
+These rules govern new creator search entries. They do not authorize deletion of existing rows or change scoring for other business tasks. An explicit request to save raw candidates can retain unsuitable or uncertain records with accurate explanations. If a round retains nobody, make no table writes. Continue useful queries under [Creator discovery](creator-discovery.md#reaching-the-requested-total) when the user's goal remains unmet; keep the same screening criteria.
 
 ## Classify evidence before assigning a level
 
