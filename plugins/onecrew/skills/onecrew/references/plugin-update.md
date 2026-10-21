@@ -39,6 +39,6 @@ Run these steps on the computer where the Codex plugin is installed, when the us
 
    Require both commands to report the target version. At the returned `installedPath`, verify the manifest and updated skill files against the selected source. Stop and report any mismatch. Keep unrelated plugins and settings.
 
-5. After installation is verified, reload the client or start a new conversation as required, then make one read-only live `account` status call. Report installation and connection results separately, including any pending reload.
+5. After installation is verified, start a new Codex conversation to load the updated plugin and skills, then make one read-only live `account` status call there. Report file verification and the new conversation's connection check separately.
 
 CLI marketplace reference: [OpenAI documentation](https://developers.openai.com/plugins/build/plugins#add-a-marketplace-from-the-cli).

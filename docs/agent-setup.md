@@ -42,7 +42,7 @@ Before requests, inspect process proxy variables and the user's system proxy set
 
 After installation, start the service with the existing data directory, verify its actual version, configure the client, and verify a live MCP call. When the selected installation already has the required version, keep its files and start only if needed. Complete each dependent step before starting the next.
 
-An absent application selects installation; a stopped service selects startup. After the permitted connection retry, stop on any remaining failure and report the step and error. When user sign-in, browser authorization or a client restart is required, pause at that step and state what remains to be verified.
+An absent application selects installation; a stopped service selects startup. After the permitted connection retry, stop on any remaining failure and report the step and error. When user sign-in or browser authorization is required, pause at that step and state what remains to be verified.
 
 Verify application and plugin versions separately against the current Access guide. Access configures the plugin version and source commit independently of the binary package. Use that source commit for skills and references. A plugin update does not require reinstalling an unchanged binary. Start the application with the same data directory that the MCP connection will use.
 
@@ -54,7 +54,7 @@ Set `ONECREW_BINARY` in the client's environment to the selected installation's 
 
 Select the Access guide's source commit through the Codex CLI, following the plugin update instructions. Install the plugin and verify its version and updated files.
 
-After installation succeeds, reload or start a new Codex conversation as required, then verify a live OneCrew tool call.
+After installation succeeds, start a new Codex conversation to load the updated marketplace plugin and skills. Verify a live OneCrew `account` status call in that conversation.
 
 ## WorkBuddy and other MCP clients
 
