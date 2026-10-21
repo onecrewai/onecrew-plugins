@@ -109,6 +109,8 @@ The database does not enforce entity uniqueness within or across tables. The cal
 
 File import belongs to the Web panel: download a blank template or select a CSV/XLSX file and import. Current structured workbooks preserve complete objects and arrays. Ordinary Excel and older formats retain their source columns. MCP has no file-import tool; use the existing batched table writes for agent-maintained data.
 
+For a requested conversion of an imported table, follow [Excel conversion](excel-conversion.md) and update the same table with `table_convert_columns`. Renaming a text column to Creator does not make it a `people` field.
+
 Saving a lead requires a valid nonempty `people` value in the first Creator field. Plain-text name columns do not qualify. Email is optional when saving a lead; contacting a lead requires an email. Platform, exact topic tag and contact-status filters apply to all saved leads. Keep the same filters when following `next_cursor`.
 
 Maintain manual contact status with `leads_set_contact_status({lead_id,status})`: `uncontacted`, `contacted`, or `null` to use mail facts again. Real pending replies remain visible and take precedence. Maintain the next follow-up with `leads_set_followup({lead_id,followup:{note,due_at?}})`; a supplied due_at must include its timezone. Use `followup:null` to clear it. These are source-specific planning fields, displayed read-only in the lead library; they do not send or schedule mail or change the source table.
