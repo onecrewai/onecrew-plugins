@@ -6,7 +6,7 @@ Connect Facebook in the Web Accounts panel by selecting an existing signed-in Ch
 { "platform": "facebook", "query": "robotics", "limit": 10 }
 ```
 
-Fetch accepts page size 1–10 (default 3). While queued/running it returns `result:null`; use status to wait. A failed task can return partial results with missing-data warnings. Fetch returns cached `result.creators`; `has_more` means another cached page. Fetch does not make Facebook requests. Call continue only when `can_continue` is true, using the same search ID and bound connection. Do not restart searches to bypass throttling or login challenges.
+Fetch accepts page size 1–10 (default 3). While queued/running it returns `result:null`; use status to wait. A failed task can return partial results with missing-data warnings. Fetch returns cached `result.creators`; `has_more` means another cached page. Fetch does not make Facebook requests. Call continue only when `can_continue` is true, using the same search ID and bound connection. For a shortfall after a query ends, follow [Reaching the requested total](creator-discovery.md#reaching-the-requested-total). Throttling and login challenges block new queries as well as continuation.
 
 Use `author.id` as the dynamic-table `platform_id`, with `platform:"facebook"`; `author.url` is the profile homepage. Matched posts contain bounded excerpts and links. Reposts and advertisements are excluded from creator evidence, and pinned posts do not imply recency. `profile.followers_text` preserves Facebook’s displayed follower count, which may be rounded; it is not an exact integer. Missing text is null; an empty string means the returned post has no text. Visible Facebook results depend on the connected account and are not global creator rankings.
 
