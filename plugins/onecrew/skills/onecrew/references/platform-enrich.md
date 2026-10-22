@@ -14,7 +14,7 @@ Pass one platform, 1–20 profile URLs and a required `fields` array. Supported 
 }
 ```
 
-Use profile URLs, not post URLs or search keywords. X/Instagram use username profile URLs; Facebook currently supports Page username URLs; YouTube uses @handle or /channel/ URLs and the connected API Key. Do not derive a different account when a supplied target fails.
+Use profile URLs, not post URLs or search keywords. X/Instagram use username profile URLs; TikTok uses /@username URLs; Facebook currently supports Page username URLs; YouTube uses @handle or /channel/ URLs and the connected API Key. Do not derive a different account when a supplied target fails.
 
 Replace the example profile URL with the user's exact target.
 

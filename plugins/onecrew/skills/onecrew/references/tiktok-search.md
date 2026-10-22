@@ -12,6 +12,6 @@ Use `result.creators[].author.id` as the native ID string and `author.url` as th
 
 Pagination and its search session are managed internally. Read every cached page indicated by `has_more`; for further queries, follow [Reaching the requested total](creator-discovery.md#reaching-the-requested-total). The final source page can exceed the requested candidate limit.
 
-TikTok currently supports content-based discovery. User search, recent-post tasks and contact enrichment are unavailable. Use the current tool schemas to determine supported operations.
+For recent content, use [Recent posts](platform-posts.md) with the author's native ID and homepage URL. For public contact fields, use [Profile contact enrichment](platform-enrich.md) with the homepage URL. Check the live tool schemas for support.
 
 Screen and save retained authors using [Creator discovery](creator-discovery.md) and [Dynamic tables](dynamic-tables.md).
