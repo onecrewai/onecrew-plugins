@@ -11,6 +11,8 @@
     "longDescription": "Find creators, read public web sources, organize workspace tables, and manage email conversations through your local OneCrew service.",
     "developerName": "OneCrew",
     "category": "Productivity",
+    "websiteURL": "https://onecrewai.io/",
+    "privacyPolicyURL": "https://onecrewai.io/privacy",
     "capabilities": [],
     "defaultPrompt": [
       "Find creators relevant to my campaign and save the results.",
