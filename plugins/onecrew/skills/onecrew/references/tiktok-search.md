@@ -1,6 +1,6 @@
 # TikTok creator search
 
-Connect TikTok in the Web Accounts panel using a signed-in Chrome or Edge profile. OneCrew manages the saved session and proxy. Check `platform_connection_list` for native search support before starting.
+Connect TikTok in the Web Accounts panel using manual import or browser-profile reading. OneCrew manages the saved session and proxy. Check `platform_connection_list` for native search support before starting.
 
 ```json
 {"platform":"tiktok","query":"nail art","limit":20}
