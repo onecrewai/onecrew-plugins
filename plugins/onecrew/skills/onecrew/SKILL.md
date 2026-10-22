@@ -11,6 +11,8 @@ For OneCrew plugin installation, updates, or reinstallation, read [Plugin update
 
 Read search platform connection status with `platform_connection_list`; it returns the last known state and check time without making a new provider request.
 
+Connect X, Instagram, Facebook, and TikTok in the Web Accounts panel. When Manual import is available, guide the user through the panel's Cookie-Editor store link, Export → JSON on the signed-in platform page, and pasting the JSON directly into OneCrew. Browser-profile reading remains an option. For browser reading or decryption failures, use manual import; for network timeouts, check the network and proxy.
+
 When a search returns `next_action: "check_proxy_in_web"`, show the affected account and `connect_url`. Wait for the user to confirm the connection is working before continuing.
 
 Use the connected OneCrew MCP tools and their current schemas. This skill supplies workflow guidance; MCP clients can also use the tools without it. Check OneCrew sign-in with `account`; direct the user to the returned authorization page when needed. Never request credentials in chat.

@@ -1,6 +1,6 @@
 # X creator search
 
-Connect and verify the intended X accounts in the Web Accounts panel by selecting existing Chrome/Edge profiles. The MCP search uses saved sessions; it cannot log in, extract cookies or choose the acting account. There is no X Chat or write operation.
+Connect and verify the intended X accounts in the Web Accounts panel using manual import or browser-profile reading. The MCP search uses saved sessions; it cannot log in, extract cookies or choose the acting account. There is no X Chat or write operation.
 
 Example creation:
 

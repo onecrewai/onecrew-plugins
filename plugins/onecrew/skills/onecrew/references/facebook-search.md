@@ -1,6 +1,6 @@
 # Facebook creator search
 
-Connect Facebook in the Web Accounts panel by selecting an existing signed-in Chrome/Edge profile. OneCrew reads that profile's Facebook cookies and verifies the active identity. MCP uses the saved connection and selects the acting account internally.
+Connect Facebook in the Web Accounts panel using manual import or browser-profile reading, then confirm the verified identity. MCP uses the saved connection and selects the acting account internally.
 
 ```json
 { "platform": "facebook", "query": "robotics", "limit": 10 }
