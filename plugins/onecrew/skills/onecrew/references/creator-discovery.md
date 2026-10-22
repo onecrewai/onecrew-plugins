@@ -32,6 +32,7 @@ Search includes basic profiles and matched evidence. X reuses sufficient native 
 | X | [Search](x-search.md) |
 | Instagram | [Search](instagram-search.md) |
 | Facebook | [Search](facebook-search.md) |
+| TikTok | [Content search](tiktok-search.md) |
 
 Accounts/Keys are selected internally. X from_accounts filters subjects, not the acting account. A continuation uses the original connection and completed profile checkpoints. `result.can_continue` is not proof a failed connection recovered. When `next_action` is `check_proxy_in_web`, show the affected account and `connect_url` and wait for user-confirmed recovery.
 

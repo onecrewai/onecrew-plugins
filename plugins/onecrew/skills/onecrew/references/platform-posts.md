@@ -1,6 +1,6 @@
 # Platform posts
 
-Use `platform_posts_create/status/fetch` when the user requests recent posts or videos, or an evaluation requires recent-content evidence. Ordinary search already includes basic profiles; do not start a posts task as a routine search follow-up or to fill missing profile fields. These tools read content, not publish it or find new accounts.
+Use `platform_posts_create/status/fetch` for platforms supported by its current input schema when the user requests recent posts or videos, or an evaluation requires recent-content evidence. Ordinary search already includes basic profiles; do not start a posts task as a routine search follow-up or to fill missing profile fields. These tools read content, not publish it or find new accounts.
 
 Pass 1–20 unique targets from one platform, each as `{platform_id:"native ID string"}`. X/Instagram/Facebook use author IDs; YouTube uses channel IDs. Obtain them from search results or saved people/company identities. No username, acting account, proxy or search_id is required.
 

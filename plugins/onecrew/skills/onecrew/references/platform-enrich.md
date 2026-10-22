@@ -1,6 +1,6 @@
 # Profile contact enrichment
 
-Use `platform_enrich_create/status/fetch` when the user requests published email, phone or linked social accounts for specified profiles. Ordinary creator search does not automatically require enrichment.
+Use `platform_enrich_create/status/fetch` for platforms supported by its current input schema when the user requests published email, phone or linked social accounts for specified profiles. Ordinary creator search does not automatically require enrichment.
 
 ## Input
 
