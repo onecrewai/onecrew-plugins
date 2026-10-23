@@ -15,7 +15,9 @@ test('marketplace uses plugin-relative launch configuration', async () => {
   const market = JSON.parse(await readFile(path.join(root, '.agents/plugins/marketplace.json')));
   assert.equal(market.name, 'onecrew');
   assert.equal(market.plugins[0].source.path, './plugins/onecrew');
-  const config = JSON.parse(await readFile(path.join(root, 'plugins/onecrew/.mcp.json'))).mcpServers.onecrew;
+  const pluginRoot = path.join(root, 'plugins/onecrew');
+  const manifest = JSON.parse(await readFile(path.join(pluginRoot, '.codex-plugin/plugin.json')));
+  const config = JSON.parse(await readFile(path.resolve(pluginRoot, manifest.mcpServers))).mcpServers.onecrew;
   assert.equal(config.type, 'stdio');
   assert.equal(config.command, './scripts/launch_onecrew_mcp');
   assert.equal(config.cwd, '.');
@@ -65,13 +67,29 @@ test('real service connects through the selected installation launchers', {timeo
   const modes = [
     ['explicit', {...baseEnv, PATH: systemPath, ONECREW_BINARY: binary}],
     ['zip', {...baseEnv, PATH: systemPath}],
+    ['workbuddy', {...process.env, PATH: systemPath}],
   ];
   if (process.env.ONECREW_TEST_NPM === '1') modes.push(
     ['npm', {...baseEnv, HOME: path.join(directory, 'no-zip-home'), LOCALAPPDATA: path.join(directory, 'no-zip-home')}],
   );
   for (const [mode, env] of modes) {
     const client = new Client({name: `onecrew-${mode}-check`, version: '1.0.0'});
-    const transport = new StdioClientTransport({command: launcher, args: [], env, stderr: 'pipe'});
+    let command = launcher;
+    let args = [];
+    if (mode === 'workbuddy') {
+      assert.equal(existsSync(path.join(plugin, '.mcp.json')), false, 'A default MCP file would override WorkBuddy configuration');
+      const manifest = JSON.parse(await readFile(path.join(plugin, '.workbuddy-plugin/plugin.json')));
+      const config = manifest.mcpServers.onecrew;
+      assert.deepEqual(Object.keys(manifest.mcpServers), ['onecrew']);
+      const values = {binary_path: binary, data_dir: profile};
+      const resolve = value => value.replace(/\$\{user_config\.([^}]+)\}/gu, (_, key) => {
+        assert.ok(manifest.userConfig[key]?.required && values[key], `Missing required plugin option: ${key}`);
+        return values[key];
+      });
+      command = resolve(config.command);
+      args = config.args.map(resolve);
+    }
+    const transport = new StdioClientTransport({command, args, env, stderr: 'pipe'});
     let stderr = '';
     transport.stderr?.on('data', chunk => {stderr += chunk;});
     t.after(() => client.close());

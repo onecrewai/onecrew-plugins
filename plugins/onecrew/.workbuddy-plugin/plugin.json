@@ -1,0 +1,31 @@
+{
+  "name": "onecrew",
+  "version": "0.1.14",
+  "description": "Discover creators, read public web sources, manage email, and maintain OneCrew workspace data.",
+  "author": {
+    "name": "OneCrew"
+  },
+  "homepage": "https://onecrewai.io/",
+  "skills": "./skills/",
+  "userConfig": {
+    "binary_path": {
+      "type": "string",
+      "description": "OneCrew 程序绝对路径 / Executable path: onecrew-pro --print-binary-path",
+      "required": true,
+      "sensitive": false
+    },
+    "data_dir": {
+      "type": "string",
+      "description": "OneCrew 数据目录 / Data directory: onecrew-pro status",
+      "required": true,
+      "sensitive": false
+    }
+  },
+  "mcpServers": {
+    "onecrew": {
+      "type": "stdio",
+      "command": "${user_config.binary_path}",
+      "args": ["mcp", "--data-dir", "${user_config.data_dir}"]
+    }
+  }
+}
