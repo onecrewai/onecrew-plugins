@@ -1,0 +1,14 @@
+{
+  "name": "onecrew",
+  "owner": {
+    "name": "OneCrew"
+  },
+  "plugins": [
+    {
+      "name": "onecrew",
+      "version": "0.1.14",
+      "source": "./plugins/onecrew",
+      "description": "OneCrew MCP, creator discovery, web research, email, and workspace Skills."
+    }
+  ]
+}

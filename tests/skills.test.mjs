@@ -9,6 +9,8 @@ test('both skills and every local reference are included in the plugin', async (
     await readFile(path.join(plugin, '.codex-plugin/plugin.json'), 'utf8'),
   );
   const root = path.resolve(plugin, manifest.skills);
+  const workbuddy = JSON.parse(await readFile(path.join(plugin, '.workbuddy-plugin/plugin.json'), 'utf8'));
+  assert.equal(path.resolve(plugin, workbuddy.skills), root);
   const names = [];
   for (const entry of await readdir(root, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;

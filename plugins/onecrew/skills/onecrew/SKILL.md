@@ -7,7 +7,7 @@ description: Discover creators, manage email workflows, and maintain OneCrew wor
 
 Follow the user's language for replies and user-facing content unless they request another language. Keep API field names, IDs, and enum values unchanged.
 
-For OneCrew plugin installation, updates, or reinstallation, read [Plugin updates](references/plugin-update.md). Use the local Codex CLI workflow described there.
+For OneCrew plugin installation, updates, or reinstallation in Codex, read [Plugin updates](references/plugin-update.md). In other clients, use that client's plugin manager.
 
 Read search platform connection status with `platform_connection_list`; it returns the last known state and check time without making a new provider request.
 

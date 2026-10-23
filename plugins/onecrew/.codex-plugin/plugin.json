@@ -1,6 +1,6 @@
 {
   "name": "onecrew",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Discover creators, read public web sources, manage email, and maintain OneCrew workspace data.",
   "author": {
     "name": "OneCrew"
@@ -20,6 +20,6 @@
       "Check my connected search platforms and email senders."
     ]
   },
-  "mcpServers": "./.mcp.json",
+  "mcpServers": "./.codex-plugin/mcp.json",
   "skills": "./skills/"
 }
