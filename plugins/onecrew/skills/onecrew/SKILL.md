@@ -17,11 +17,15 @@ When a search returns `next_action: "check_proxy_in_web"`, show the affected acc
 
 Use the connected OneCrew MCP tools and their current schemas. This skill supplies workflow guidance; MCP clients can also use the tools without it. Check OneCrew sign-in with `account`; direct the user to the returned authorization page when needed. Never request credentials in chat.
 
+On parameter-validation failure, compare the request with the tool's current schema and retry only after identifying a specific mismatch. If the schema rejects its own declared parameters, report the validation error and stop that call.
+
 Before selecting a table, designing columns, or writing records, read [Dynamic tables](references/dynamic-tables.md). It defines table continuity within a conversation, entity updates, rich cell types, and write verification.
 
 For converting imported tables to standard fields in place, or converting Excel files, read [Excel conversion](references/excel-conversion.md).
 
 For creator discovery, read [Creator discovery](references/creator-discovery.md). Search includes basic profiles and matched content. Check relevance and required conditions, assign 1–2 short evidence-based content tags, then score and save retained candidates with their creator and platform profile. Followers is optional. `limit` is a candidate target: default 20, range 1–100. Follow `poll_after_ms` and report actual saved and unverified counts.
+
+Run one search at a time across all keywords and platforms in the conversation. Wait for the active search to finish, fetch and process its results, then continue that search or start the next query. Keep query plans sequential, including searches delegated to other agents.
 
 For requested recent posts or an evaluation that needs recent evidence, read [Platform posts](references/platform-posts.md). Ordinary search does not require this follow-up. Use native account IDs from search results or saved records.
 
