@@ -13,6 +13,8 @@ For contacts on a supplied platform profile, use OneCrew's enrichment workflow a
 
 Use `web_search` to find source pages. Limit defaults to 5 and is capped at 10. Results carry `evidence: search_candidate`; read the source before making a factual claim. `no_matches` means the search returned an explicit no-match response. Access checks, timeouts and unreadable responses are errors, not evidence of absence.
 
+Issue one search query at a time. Wait for the current search and review its results before starting another query, including when researching multiple creators or alongside a native platform search.
+
 Use `web_extract` with `mode: page` for contact pages and profiles, or `mode: article` for article text. Leave `include_links` false when reading evidence; enable it when links are needed for a follow-up. Relevant links include source fields, labels and available context. Check text and link truncation separately. The tool visits only the requested page and necessary redirects.
 
 When finding accounts without a supplied profile URL, start with the creator's name. If returned results are irrelevant or explicitly have no matches, refine with their name plus official site or Linktree, up to three queries per creator. Stop searching when a suitable official source is found. Read its published links to verify associations. A matching username alone leaves an account unverified.
