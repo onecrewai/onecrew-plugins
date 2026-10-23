@@ -13,16 +13,17 @@ codex plugin add onecrew@onecrew
 
 Use Codex and OneCrew on the same computer. Select your operating system and installation method on the [Pro installation page](https://onecrewai.io/en/product/onecrew-pro#install), then start a new Codex conversation after plugin installation.
 
+To use OneCrew in Codex, type `@` in the chat input, select **OneCrew**, then enter your request.
+
 If you previously added OneCrew from a local folder, run `codex plugin marketplace remove onecrew` before adding this GitHub source. Your OneCrew data is kept.
 
 ## WorkBuddy desktop
 
-1. Open the upper-left **Experts · Skills · Connectors → Skills → Suites → Add Marketplace** and enter `onecrewai/onecrew-plugins`.
-2. Install the **OneCrew** suite from that marketplace. It includes MCP and both Skills.
-3. In the suite settings, set `binary_path` to the native executable path printed by `onecrew-pro --print-binary-path`, and `data_dir` to the data directory printed by `onecrew-pro status`. On Windows, use `onecrew-pro.cmd` for these commands. Enter the actual paths without shell quotes.
-4. Restart WorkBuddy, trust and enable the suite's OneCrew connection under **Connectors**, then start a new conversation. Verify the connection with `account` → `status` and confirm both Skills are loaded.
+1. Open **Experts · Skills · Connectors** in the left sidebar → **Skills → Suites**, then click **+** beside the marketplace tabs.
+2. Enter `https://github.com/onecrewai/onecrew-plugins` in **Marketplace source** and click **Submit**.
+3. Select the **onecrew** marketplace and click **+** on the **onecrew** card. A checkmark indicates the plugin is installed.
 
-If a standalone OneCrew MCP connection already exists, disable that duplicate after verifying the suite connection. Preserve other connectors. Update the paths in suite settings if the installation or data directory moves.
+Type `/one` in the chat input, select **onecrew** or **onecrew-web-research** from the Skills list, then enter your request.
 
 ## Update in Codex
 

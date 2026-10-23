@@ -11,7 +11,9 @@ When the user's prompt already contains a guide URL, use that complete URL, incl
 
 Use the current AI client unless the user selects another. Codex and WorkBuddy desktop use the plugins published by this repository; other compatible clients connect to the local Pro MCP service. A plugin-only update keeps the existing application and data directory.
 
-For WorkBuddy desktop, follow [the suite installation steps](../README.md#workbuddy-desktop). Provide the resolved executable path and the running service's data directory for its settings. The suite includes MCP and both Skills; keep one active OneCrew connection. Installation verification requires a live tool call in a new WorkBuddy conversation after restart and trust.
+For WorkBuddy desktop, follow [the suite installation steps](../README.md#workbuddy-desktop). After installation, show how to select a Skill by typing `/one`; in Codex, show how to select OneCrew by typing `@`. Verify MCP separately with a live tool call.
+
+When configuring the WorkBuddy plugin's MCP connection, use the resolved native executable for `binary_path` and the running service's data directory for `data_dir`. Preserve other connectors and keep one active OneCrew connection.
 
 For OneCrew Lite, use its own installation guide.
 
