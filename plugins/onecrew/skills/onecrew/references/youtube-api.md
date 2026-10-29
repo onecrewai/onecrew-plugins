@@ -2,6 +2,8 @@
 
 OneCrew uses a YouTube Data API v3 Key configured by the user in the Web Accounts panel to retrieve public videos and channel details. Use the connected MCP tools; the plugin distributes configuration and workflow guidance. Do not look for OpenCLI or service source code.
 
+For Key creation, API restrictions, connection errors and quota questions, read [YouTube setup in the Pro FAQ](faq.md#youtube-api-key).
+
 ## Scope before calling a tool
 
 This workflow finds channels relevant to a content topic. It searches public video metadata in relevance order, deduplicates their channel IDs, and returns channel profiles plus limited video evidence. It is not general web search, a complete channel directory, an exact channel lookup, or a subscriber leaderboard.
@@ -28,7 +30,7 @@ The calling agent orchestrates this workflow; the search backend does not create
 
 Discovery identifies channels relevant to a content requirement. It does not provide a global popularity leaderboard or perform follows, likes, or direct messages. Search relevance is not popularity rank.
 
-When no usable Key exists, provide the returned `connect_url` and let the user configure it in the Web panel. New tasks use automatic weighted rotation (primary 3, other available keys 1). The backend may try up to three distinct keys only before the first successful request; a task that has already obtained data stays bound to its original key. A failed continuation preserves earlier evidence and reports a safe key hint without exposing its value. Respect `retry_at` for short-term throttling. An actual project quota error blocks further queries until quota recovery; changing keywords or cycling Keys does not resolve it. Continuation does not renew the original result expiry. No browser extension or YouTube account login is required.
+When no usable Key exists, provide the returned `connect_url` and let the user configure it in the Web panel. New tasks use automatic weighted rotation (primary 3, other available keys 1). Before the first successful request, the backend can try another available Key on a credential, quota or rate-limit error; it excludes failed Keys and does not repeat an attempted Key. A task that has already obtained data stays bound to its original Key. A failed continuation preserves earlier evidence and reports a safe Key hint without exposing its value. Affected connections remain Needs attention until a successful Web connection check. Respect `retry_at` before checking a throttled Key again. Keys in the same project share its quota; changing keywords or cycling those Keys does not restore it. Continuation does not renew the original result expiry. No browser extension or YouTube account login is required.
 
 ## Evaluate from evidence
 

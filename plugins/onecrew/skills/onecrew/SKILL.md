@@ -1,6 +1,6 @@
 ---
 name: onecrew
-description: Discover creators, manage email workflows, and maintain OneCrew workspace data. Use when checking platform connections, researching creators, working with email or dynamic tables through OneCrew MCP, converting imported tables to standard fields in place, converting Excel files, locating a OneCrew installation, checking application or plugin versions, or installing and updating OneCrew client plugins and shared Skills.
+description: Discover creators, manage email workflows, and maintain OneCrew workspace data. Use when answering OneCrew Pro setup and usage questions, checking platform connections, researching creators, working with email or dynamic tables through OneCrew MCP, converting imported tables to standard fields in place, converting Excel files, locating a OneCrew installation, checking application or plugin versions, or installing and updating OneCrew client plugins and shared Skills.
 ---
 
 # OneCrew
@@ -13,7 +13,7 @@ For plugin installation, updates or reinstallation, use the current client's plu
 
 Read search platform connection status with `platform_connection_list`; it returns the last known state and check time without making a new provider request.
 
-Connect X, Instagram, Facebook, and TikTok in the Web Accounts panel. When Manual import is available, guide the user through the panel's Cookie-Editor store link, Export → JSON on the signed-in platform page, and pasting the JSON directly into OneCrew. Browser-profile reading remains an option. For browser reading or decryption failures, use manual import; for network timeouts, check the network and proxy.
+For account setup, Cookie export, YouTube API Key creation, connection errors, or product capability questions, read [Pro FAQ](references/faq.md). Answer the relevant question in the user's language and include the corresponding official links for setup steps. General how-to questions do not require connecting an account or running a search.
 
 When a search returns `next_action: "check_proxy_in_web"`, show the affected account and `connect_url`. Wait for the user to confirm the connection is working before continuing.
 
