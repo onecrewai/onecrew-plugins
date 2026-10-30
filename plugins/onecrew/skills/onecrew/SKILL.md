@@ -11,7 +11,9 @@ For installation paths, application or plugin version checks, or application upd
 
 For plugin installation, updates or reinstallation, use the current client's plugin manager. Codex-specific steps are in [Plugin updates](references/plugin-update.md).
 
-Read search platform connection status with `platform_connection_list`; it returns the last known state and check time without making a new provider request.
+Read search platform connection status with `platform_connection_list`. Use `available`, `unavailable_reason`, `expires_at` and `last_checked_at` when returned. The list reads local records without making a new provider request. `connected` alone does not establish current usability.
+
+For mailbox availability, read [Email workflows](references/email.md) before interpreting `mail_sender_list`; a configured sender identity can outlive its mailbox authorization.
 
 For account setup, Cookie export, YouTube API Key creation, connection errors, or product capability questions, read [Pro FAQ](references/faq.md). Answer the relevant question in the user's language and include the corresponding official links for setup steps. General how-to questions do not require connecting an account or running a search.
 
