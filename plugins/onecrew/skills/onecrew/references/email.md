@@ -2,6 +2,14 @@
 
 Connect and manage mailboxes in the OneCrew Web panel. Never request credentials in chat.
 
+## Mailbox status
+
+`mail_sender_list` reads saved sender and mailbox connection state. Use `can_send`, `connection_status`, `verification`, `last_checked_at` and `error_code` when returned. `sender_status` describes the configured identity. A disabled identity, pending check, failed connection or expired authorization cannot be reported as ready to send. `configuration_only` describes configuration checks; it does not confirm a live provider check.
+
+Older applications return only the sender identity's `status`. In that response, `ready` does not establish that the mailbox authorization still works. Report the available evidence and direct the user to Email → Manage mailboxes for a connection check. Reading sender or platform lists does not perform that check.
+
+An authorization error requires restoring access to the mailbox account and reconnecting when necessary. Rate limits, provider access restrictions, OAuth application configuration errors and temporary network failures have different error codes. A generic OAuth failure does not establish that an account was suspended.
+
 ## Select sources and prepare mail
 
 Read `leads_list`/`leads_get` to choose the actual source row. Save a requested table row with `leads_add` when needed. Sources remain independent across tables even when their person, handle, platform ID or email matches; never merge them to send mail.

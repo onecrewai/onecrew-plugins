@@ -120,7 +120,17 @@ After resolving the reported cause, use the connection menu in Accounts:
 
 Waiting for `retry_at` alone does not clear the saved Needs attention state.
 
+### Does Connected mean the account was just checked?
+
+Connection lists show local records and the last check time. Reading the list does not contact the provider. Where returned, `available` includes the recorded connection state, Cookie expiry and participation setting; `unavailable_reason` distinguishes expired, paused and Needs attention. A Cookie session whose recorded expiry has passed is excluded from searches. An older application may still display its last Connected status.
+
 ## Other Pro questions
+
+### Why can a configured email sender have an OAuth error?
+
+The sender identity and mailbox authorization are separate records. `mail_sender_list` responses with `can_send` and `connection_status` include mailbox availability. Older responses containing only the sender's `status: ready` establish that the identity was configured, not that its authorization is still valid. The mailbox's error code and last check time are shown in Email → Manage mailboxes.
+
+Google authorization can expire or be revoked; provider restrictions and temporary failures can also prevent access. A general 403 or OAuth error alone does not identify an account suspension. See Google's [OAuth token expiration](https://developers.google.com/identity/protocols/oauth2#expiration) and [Gmail error reference](https://developers.google.com/workspace/gmail/api/guides/handle-errors).
 
 ### Why does the login window not open in my AI client?
 
