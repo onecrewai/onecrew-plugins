@@ -77,11 +77,17 @@ Keep the repository URL, exact commit, source subdirectory and installed locatio
 
 Check the registered installation and its files. GitHub source and other cache directories are only comparison sources.
 
+## Runtime files and user data
+
+On macOS, the runtime cache is under `~/Library/Caches/OneCrewConnect/runtime`. Embedded runtime files can be restored from the installed executable. The user data profile is separate; its default path is `~/Library/Application Support/OneCrewConnect`.
+
+Windows npm packages load runtime files from the package's `app` directory. Missing installed files require npm repair or reinstallation while keeping the data profile. The default Windows data profile is `%LOCALAPPDATA%\OneCrewConnect`.
+
 ## Update
 
 - Application: prefer the built-in updater. If it fails, return to the [installation page](https://onecrewai.io/zh/product/onecrew-pro#install) and follow the original prompt's npm update branch. Confirm the current job has ended and needs no recovery, then stop the old service, install and start. Preserve the data directory, port and MCP configuration. No uninstall is needed.
 - Plugin: use the current client's plugin manager; see [Plugin updates](plugin-update.md) for Codex. Verify this separately from the application version.
 - Standalone Skills: update both directories from the selected commit, preserve local customizations, and update their source records. Keep the working MCP configuration.
-- The AI assistant executes the commands. Choose a supported execution tool based on the failure and obtain the required authorization. The user handles only approvals, sign-in or client restarts that require their presence.
+- The assistant executes the commands. On failure, diagnose and fix the path, arguments or environment, then retry and continue. Request needed permissions through the client. Independent HTTP version and existing MCP checks can continue while a CLI step is blocked. The user handles approvals, sign-in and required client restarts.
 
 Report the application version, plugin version or standalone Skill source revision, and result of a real MCP call separately. If the client needs a restart or new conversation to load the plugin or Skills, complete that step before reporting them as loaded.

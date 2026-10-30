@@ -1,6 +1,6 @@
 # OneCrew Pro FAQ
 
-Product behavior: Pro 0.1.21. External documentation checked on October 29, 2026.
+Product behavior: Pro 0.1.22. External documentation checked on October 29, 2026.
 
 ## Account connections
 
