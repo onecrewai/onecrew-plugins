@@ -2,7 +2,7 @@
 
 Use `platform_connection_list` for supported platforms and saved connection state. Setup and live account verification belong in the Web Accounts panel at `connect_url`.
 
-Use native platform search where supported. For other platforms, use verified public profile and content pages through the webpage research workflow when OneCrew is explicitly invoked. Apply the same screening, tags, rating and fixed table fields below. Omit unavailable native IDs; never invent them or merge people by a matching handle.
+Use native platform search where supported. When platform tools cannot provide the needed candidates or information, ask before using OneCrew's `web_search`; reuse permission already given. The client's built-in web search remains available under its own permissions. Apply the same screening, tags, rating and fixed table fields to public profile and content pages. Omit unavailable native IDs; never invent them or merge people by a matching handle.
 
 ## Search, screen, assess, save
 
@@ -23,6 +23,8 @@ Use native platform search where supported. For other platforms, use verified pu
 - Preserve the user's required conditions. Do not repeat the same exhausted query to reset its budget, weaken screening, change acting accounts or cycle API Keys to evade a limit. If queries stop yielding new qualified creators and useful query coverage is exhausted, report the verified total and shortfall.
 - Authentication failures, verification challenges, actual provider quota errors, throttling and unresolved connection/protocol errors block further requests to the affected platform. Read `error_code`, `recovery`, `retry_at` and `next_action`; respect the returned cooldown or recovery requirement. Changing a keyword does not resolve these errors. Stop collecting once the requested total or the user's request/time budget is reached.
 - Expired or evicted task results are unavailable, not zero matches. Reuse saved evidence first. If the active request still needs new evidence, a replacement search is allowed after checking connection errors and prior attempts; do not loop on repeatedly unavailable tasks.
+
+A webpage error does not block native platform searches or invalidate evidence already obtained. Continue useful platform queries and save qualified candidates. Keep unresolved required attributes separate; an optional website or email lookup does not add a new qualification requirement.
 
 Search includes basic profiles and matched evidence. X reuses sufficient native author fields and fills missing basics when needed; Instagram/Facebook look up distinct authors within the same search; YouTube batches channel profiles. Recent timelines are not read. Fields still missing after a profile attempt remain unknown, not empty biographies or zero followers; profile_error explains an unavailable or unfinished lookup. A keyword-selected post does not establish sustained recent relevance.
 

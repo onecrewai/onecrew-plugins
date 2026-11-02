@@ -35,7 +35,9 @@ For requested recent posts or an evaluation that needs recent evidence, read [Pl
 
 For requested contacts, read [Profile contact enrichment](references/platform-enrich.md). Use an exact profile URL directly when available. Finding a named creator's contact details does not require a topic discovery search.
 
-Use `onecrew-web-research` and OneCrew's `web_search` / `web_extract` only when the user explicitly names OneCrew or selects its plugin in this conversation. General web requests and installed tools alone do not trigger these OneCrew tools. Other available web tools remain available.
+For creator research, use platform search and profile enrichment first. If they cannot provide the needed information, ask before using OneCrew's `web_search`, unless the user already requested it. This restriction does not apply to the client's built-in web search. Read `onecrew-web-research` when using OneCrew's webpage tools.
+
+A failed webpage search or read leaves that information unresolved. Continue unaffected platform searches, process available results, and save candidates that meet the user's criteria.
 
 For saving source rows as leads and maintaining their contact status or next follow-up, read [Dynamic tables](references/dynamic-tables.md). Source rows remain independent across tables; the lead library displays their current values without merging people.
 
