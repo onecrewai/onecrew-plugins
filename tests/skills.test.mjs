@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 const plugin = fileURLToPath(new URL('../plugins/onecrew/', import.meta.url));
 test('both skills and every local reference are included in the plugin', async () => {
   const manifest = JSON.parse(
@@ -18,8 +18,10 @@ test('both skills and every local reference are included in the plugin', async (
     const skill = await readFile(path.join(root, name, 'SKILL.md'), 'utf8');
     assert.match(skill, new RegExp(`^---\\nname: ${name}\\n`));
     names.push(name);
-    for (const match of skill.matchAll(/\]\((references\/[^)]+)\)/gu))
-      assert((await readFile(path.join(root, name, match[1]), 'utf8')).trim());
+    for (const match of skill.matchAll(/\]\((references\/[^)]+)\)/gu)) {
+      const reference = new URL(match[1], pathToFileURL(path.join(root, name, 'SKILL.md')));
+      assert((await readFile(fileURLToPath(reference), 'utf8')).trim());
+    }
   }
   assert.deepEqual(names.sort(), ['onecrew', 'onecrew-web-research']);
 });

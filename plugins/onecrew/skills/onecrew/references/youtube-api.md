@@ -1,75 +1,40 @@
-# YouTube creator discovery
+# YouTube creator search
 
-OneCrew uses a YouTube Data API v3 Key configured by the user in the Web Accounts panel to retrieve public videos and channel details. Use the connected MCP tools; the plugin distributes configuration and workflow guidance. Do not look for OpenCLI or service source code.
+OneCrew searches public video metadata, extracts distinct channel IDs, and reads basic channel profiles. The user connects an API Key in Web Accounts; setup and connection errors are covered in the [Pro FAQ](faq.md#youtube-api-key).
 
-For Key creation, API restrictions, connection errors and quota questions, read [YouTube setup in the Pro FAQ](faq.md#youtube-api-key).
+## Search conditions
 
-## Scope before calling a tool
+Call `platform_search_create` with `platform: "youtube"`, `query`, and optional conditions from the tool schema. `limit` is a candidate target per run (default 20, range 1–100); the whole final source page is retained.
 
-This workflow finds channels relevant to a content topic. It searches public video metadata in relevance order, deduplicates their channel IDs, and returns channel profiles plus limited video evidence. It is not general web search, a complete channel directory, an exact channel lookup, or a subscriber leaderboard.
+| Parameters | Meaning |
+| --- | --- |
+| `publishedAfter`, `publishedBefore` | Inclusive video publication bounds in RFC 3339 format. The lower bound cannot exceed the upper bound. |
+| `order` | `relevance` (default), `date`, `rating`, `title`, or `viewCount`; sorts videos, not creators by subscribers. |
+| `relevanceLanguage` | Language preference. Results in other languages can still appear. |
+| `regionCode` | Region where videos can be viewed; not creator residence. |
+| `channelId` | Search videos from the specified channel. |
+| `videoCategoryId`, `topicId` | Video category or a supported YouTube topic ID. |
+| `videoDuration` | `short`: under 4 minutes; `medium`: 4–20 minutes; `long`: over 20 minutes. |
+| `location`, `locationRadius` | Video metadata location. Supply both; radius is at most 1000 km. This does not establish creator residence. |
 
-- Suitable: discover creators discussing a product category, industry, or campaign topic, then assess the returned evidence.
-- Outside this workflow: the globally most-subscribed channels, an exhaustive country/category ranking, broad web research, or a current factual question that needs sources outside the returned video metadata.
-- For an out-of-scope request, use an available web-search or ranking-data tool and read the dated source, or state that the required capability is unavailable. Do not start a topic search merely to appear to cover the request. Do not search for “most subscribed” or combine remembered famous channel names as a substitute for a leaderboard.
-- Each collection batch targets `limit` new candidate channels (default 20, range 1–100) and retains the whole final source page. Each search ID, including its continuations, shares a maximum of five upstream search pages, 400 actual API attempts (retries also count), and at most 250 distinct candidates. These local task budgets are separate from the provider's project quota and the user's total across distinct queries. It keeps up to three source matching-video snippets per channel; basic channel profiles are batched. `limit` is a collection target, not a worldwide rank. Sorting returned candidates by subscribers only orders that sample.
-- Web search can locate a ranking source; it does not itself prove ranking completeness. Check the source date and population (for example, all channels versus individual creators), retain its attribution, and label the ranking accordingly. Keep externally sourced figures distinct from OneCrew search evidence.
+The schema also exposes broadcast status, safe-search and video attribute filters: `eventType`, `safeSearch`, `videoCaption`, `videoDefinition`, `videoDimension`, `videoEmbeddable`, `videoLicense`, `videoPaidProductPlacement`, `videoSyndicated`, and `videoType`.
 
-## Workflow
+These are public `type=video` searches. Google has no subscriber or business-email search filter. OneCrew can filter subscriber counts and channel countries after retrieving profiles. Search results are samples, not an exhaustive directory or global ranking. Non-relevance sorting and date filters can reduce coverage. See Google's [search.list reference](https://developers.google.com/youtube/data/reference/rest/v3/search/list).
 
-User requirements → relevant videos → deduplicated channel IDs → channel profiles and matched video evidence → evaluation → update the conversation's target table → return its link.
+## Results and continuation
 
-The calling agent orchestrates this workflow; the search backend does not create tables. Save by default unless the user explicitly requests preview only. Before saving, apply [Dynamic tables: Keep one target table per conversation](dynamic-tables.md#keep-one-target-table-per-conversation). Do not write results into the creator library.
+Retain `search_id`, poll status at `poll_after_ms`, then review complete records in pages of 20. Follow `next_page` while more qualified creators are needed and stop at the goal. Fetch makes no upstream requests. Each channel includes its native `platform_id`, name, URL and available profile fields, with up to three matched-video snippets. For reading newly appended results, use [Cached-page progress](creator-discovery.md#cached-page-progress).
 
-1. Check OneCrew sign-in with `account`. If needed, return the authorization URL for the user to complete in their browser. Use `platform_connection_list` to read configured search connections, their last known status and `last_checked_at`. This is not a live credential verification. Only the user can connect, revalidate, select, or disconnect platform credentials in the Web Accounts panel. Ordinary local MCP clients cannot manage connections either; never request or receive API Keys in tool arguments or chat.
-2. Call `platform_search_create` with `platform: "youtube"`, `query`, and `limit` (default 20, range 1–100). The query describes relevant video content; the limit is a per-batch target number of distinct channels, not videos. Do not ask the user to choose a channel-search versus video-search mode.
-3. Retain `search_id` and poll `platform_search_status` after the returned `poll_after_ms` while queued or running. Running `phase` distinguishes searching from reading_details. Do not create another job while waiting. Report and resolve a failure before retrying.
-4. Once completed (even if fewer candidates than the target were found), call `platform_search_fetch` with `{search_id, platform: "youtube", params: {page: 1, size: 20}}`. Read `result.channels` and fetch subsequent cached pages while `result.has_more` is true. The top-level envelope contains task metadata, not paging fields. `result.upstream_has_more` describes source coverage. To collect more evidence, call `platform_search_continue({search_id})` only when `result.can_continue` is true, then poll the same ID. Continuation consumes platform requests, reuses the original Key/cursor and appends to the existing results. Repeating fetch never expands a search. Hard budget exhaustion can leave upstream_has_more=true with can_continue=false. Report the actual count and explain `result.stop_reason` / `result.warnings`.
-   `can_continue:false` only ends this search ID's continuation. Follow [Reaching the requested total](creator-discovery.md#reaching-the-requested-total) for distinct relevant queries and cumulative deduplication. Search tasks and results are temporary memory-only data; `search.result_unavailable` does not mean zero matches or exhausted provider quota. Reuse saved evidence before replacing an unavailable task. Candidate records only become persistent when saved to the dynamic table.
-5. Evaluate fit using the evidence below. Match existing platform identities in the target table, call `table_update_rows` for existing entities, and `table_create_rows` for new ones. Use `table_create` only when permitted by the target-table rules. Preserve an existing schema; do not make a replacement table or change columns just to fit the default format. Return `web_url` and the actual added/updated counts.
-6. Retain the mapping from each `search_id` to the target `table_id`, column IDs, and record IDs. Use the table reference for subsequent maintenance and recovery.
+Use fetch `params.min_subscribers`, `country` and `exclude_ids` for user-specified conditions and previously reviewed channels. Filtering preserves complete records and the raw cache. `total` counts filtered records; `source_total` counts all cached records. Missing country/count values stay in the result and are reported by `unknown_country_count` and `unknown_subscriber_count`. Keep filters and exclusions fixed while paging.
 
-Discovery identifies channels relevant to a content requirement. It does not provide a global popularity leaderboard or perform follows, likes, or direct messages. Search relevance is not popularity rank.
+`country` is the channel's configured country (`snippet.country`); missing means unknown. Use it for an initial declared-country selection, with extra evidence for conflicting information or an actual-location requirement. It does not establish residence or audience geography. Subscriber values retain YouTube's returned precision. See Google's [channel fields](https://developers.google.com/youtube/data/reference/rest/v3/channels#snippet.country).
 
-When no usable Key exists, provide the returned `connect_url` and let the user configure it in the Web panel. New tasks use automatic weighted rotation (primary 3, other available keys 1). Before the first successful request, the backend can try another available Key on a credential, quota or rate-limit error; it excludes failed Keys and does not repeat an attempted Key. A task that has already obtained data stays bound to its original Key. A failed continuation preserves earlier evidence and reports a safe Key hint without exposing its value. Affected connections remain Needs attention until a successful Web connection check. Respect `retry_at` before checking a throttled Key again. Keys in the same project share its quota; changing keywords or cycling those Keys does not restore it. Continuation does not renew the original result expiry. No browser extension or YouTube account login is required.
+For missing requested email, pass this `search_id` and selected channel URLs to `platform_enrich_create`. It reuses cached profiles and batch-reads the matched videos' full descriptions before trying public About and linked Linktree sources. Source context helps distinguish creator contacts from sponsor/support addresses. Existing dated matches can establish recent activity; no recent timeline is needed just to repeat that check.
 
-## Evaluate from evidence
+`platform_search_continue({search_id})` reuses the original conditions, cursor, candidates and remaining budget. The backend can switch an unavailable Key during pagination or channel lookup, retrying only the failed request. Successful pages and channel batches remain saved. Failed Keys are excluded from selection; known Keys in an exhausted project are paused together. Project identity is recorded only when Google provides it. Multiple Keys in one project share quota.
 
-Each channel returns `platform_id`, `name`, and `url`, plus `image_url`, `description`, `subscriber_text`, `matched_videos` when available. Never invent missing avatars, native IDs, exact subscriber counts, or recent content.
+If all usable Keys fail, fetch the retained results and read `error_code`, `recovery` and `failed_connections`. `retry_at` is supplied only when the response provides a valid retry time; an unspecified 429 does not establish a 60-second recovery. A successful Web connection check clears a Key's Needs attention state. A channel lookup can pass while the separate search quota remains exhausted.
 
-Read [Evaluation and reasons](match-evaluation.md) before assigning a level or writing `reason`. It defines the required-condition checks, four-level rubric, unknown outcomes, evidence limits, and explanation format. Apply it to the user's current brief and the evidence actually returned.
+Each search ID has up to five upstream search pages, 400 API attempts and 250 distinct candidates. Continuation does not renew its temporary result lifetime. `can_continue` means work remains within that task, not that provider access has recovered.
 
-The calling agent performs the evaluation. The search service returns factual evidence, not an automatic business score.
-
-### Data limits of this workflow
-
-- Titles and descriptions establish the available metadata, not that a video was watched or its production quality verified. A video appearing in both matching and recent results is one observation.
-- Explicit details may include recent_videos; check returned published_text when evaluating dates. Ordinary search has no recent_videos. Preserve subscriber_text and views_text precision.
-- This search result does not establish audience demographics or geography, spoken language, engagement rate, budget, collaboration intent, or conversion performance. Treat unavailable information according to the common evaluation reference.
-
-## Default format for a new creator table
-
-Read [Dynamic tables](dynamic-tables.md) before writing. When creating a new creator result table is appropriate, use these four columns by default:
-
-| Column  | Type    | Value                                                                                            |
-| ------- | ------- | ------------------------------------------------------------------------------------------------ |
-| Creator | people  | `{name, image_url?, identity: {platform: "youtube", platform_id}}`; name and avatar share a cell |
-| Content topics | topics | 1–2 short category tags from the actual profile and video evidence; `[]` when unknown |
-| Profile | profile | `{platform: "youtube", url: <returned channel homepage>}`; never a video or guessed handle URL  |
-| Score   | score   | `{level, reason}`; rating badge and hover explanation, or `null` for insufficient evidence       |
-
-Keep this column order. Specialized titles are fixed and localized by OneCrew as Creator/Content topics/Profile/Score or 达人/内容领域/平台主页/评分; callers cannot rename them. An explicitly brand-only list may use `company` instead of `people`. Preserve the native `platform_id`; never substitute a name, handle, or URL. Reuse an existing row when the target table already contains that entity.
-
-Unless the user requests them, do not add separate avatar, biography, subscriber count, matching-video, evaluation-text, source, or retrieval-date columns. Evidence supports evaluation and the reply; it does not automatically become table columns.
-
-When follower counts are requested, use `followers` with `{platform: "youtube", count}`. Save only a verified complete nonnegative safe integer; unknown or abbreviated subscriber text means count is null. Retain the source precision and do not invent exact digits.
-
-Use real tool-returned column IDs. Report saving only after confirmed row writes, with the exact `web_url` and actual counts. A completed search or empty table alone does not mean records were saved.
-
-`limit` is the collection target per run, not a hard return limit. YouTube controls source pages. Keep the whole last page: 8 existing plus 5 new authors yields 13 for a target of 10, and all 13 receive the batched basic channel lookup. Fetch paginates cached channels; explicit continuation, when allowed, collects another batch with the same key and cursor.
-
-
-## Search and recent-content scope
-
-Default search uses searchVideos and batched basic channel profiles (up to 50 IDs per request). It keeps matched video snippets and native channel identities, not recent_videos. It does not fetch each uploads playlist or enrich every matched video with video details. Review the basic profiles and matched evidence under [Creator discovery](creator-discovery.md) before rating and saving retained channels.
-
-For requested recent-content evidence, use [Platform posts](platform-posts.md). It resolves uploads and batches video details for only the specified native channel IDs. Preserve those IDs in the Name cell and update the same rows; do not infer recent activity from total channel counts.
+Use [Creator discovery](creator-discovery.md) for screening, cumulative targets and saving results. Use [Platform posts](platform-posts.md) when recent-content evidence is needed; ordinary search does not read uploads playlists or recent timelines.

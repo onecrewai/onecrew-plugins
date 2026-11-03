@@ -17,6 +17,8 @@ Issue one search query at a time. Wait for the current search and review its res
 
 Use `web_extract` with `mode: page` for contact pages and profiles, or `mode: article` for article text. Leave `include_links` false when reading evidence; enable it when links are needed for a follow-up. Relevant links include source fields, labels and available context. Check text and link truncation separately. The tool visits only the requested page and necessary redirects.
 
+Read independent known pages with up to four concurrent `web_extract` calls. Reuse a URL's existing result within the task. A failed page leaves its missing facts unresolved while other candidates continue. Queue wait does not consume the operation timeout; queued work can still be cancelled or rejected when the queue is full.
+
 For an approved name-based lookup, search the creator's name and refine with their official site or Linktree when needed. Read the source's published links to verify associations. A matching username alone leaves an account unverified.
 
 `page_published_link` establishes that the source page publishes a link. Check whether that source belongs to the creator, then distinguish the creator's own account from a related brand, charity, show, store or guest appearance. Preserve the page's label and source URL. Video and playlist URLs are content links, not account profiles.

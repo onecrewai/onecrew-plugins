@@ -10,7 +10,7 @@ TikTok searches videos and photos, then extracts and deduplicates their authors.
 
 Use `result.creators[].author.id` as the native ID string and `author.url` as the creator's homepage. Profile facts and `matched_posts` come from the search response; missing values remain unknown. Matched content does not establish recent posting frequency.
 
-Pagination and its search session are managed internally. Read every cached page indicated by `has_more`; for further queries, follow [Reaching the requested total](creator-discovery.md#reaching-the-requested-total). The final source page can exceed the requested candidate limit.
+Pagination and its search session are managed internally. Read cached pages indicated by `has_more` while more qualified creators are needed; follow [Reaching the requested total](creator-discovery.md#reaching-the-requested-total). The final source page can exceed the requested candidate limit.
 
 For recent content, use [Recent posts](platform-posts.md) with the author's native ID and homepage URL. For public contact fields, use [Profile contact enrichment](platform-enrich.md) with the homepage URL. Check the live tool schemas for support.
 

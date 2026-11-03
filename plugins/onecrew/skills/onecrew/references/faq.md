@@ -97,6 +97,7 @@ Pro calls YouTube from its local service. Website/HTTP-referrer restrictions do 
 | `youtube.key_restricted` | Google denied access. Check API restrictions and application restrictions for Pro's actual request origin. |
 | `youtube.quota_exceeded` | The project has exhausted an applicable quota. Check YouTube Data API v3 → Quotas & System Limits in Google Cloud; wait for recovery or request an extension. |
 | `youtube.rate_limited` | Google throttled requests. Respect the returned `retry_at`, then check the connection after the restriction lifts. |
+| `youtube.limit_unknown` | Google returned an unspecified request limit. The Key is paused; no recovery time is assumed. |
 | `youtube.validation_timeout` / `youtube.unavailable` | Verification timed out or the API could not be reached. Check network access before retrying. |
 
 Google documents its [API errors](https://developers.google.com/youtube/data/reference/rest/v3/errors) and [quota extension process](https://developers.google.com/youtube/data/guides/quota_and_compliance_audits). Actual quota allocations appear in the project's Console. Additional Keys in the same project share its quotas; they do not create additional project allowance.
@@ -109,7 +110,9 @@ OneCrew verifies a Key with a public channel lookup. That check does not test th
 
 Pro supports up to 20 Cookie accounts per platform and 20 YouTube Keys. Primary has a higher selection weight. Other connected, available accounts or Keys can still be selected. Cookie accounts also have a participation setting; paused accounts are excluded from automatic selection.
 
-On credential, quota or rate-limit errors, Pro marks the affected connection Needs attention and excludes it from new searches. Before a new search has obtained source data, the service can switch internally to another available connection, without repeating the same failed connection. After source data has been obtained, that search and its continuations keep their original connection so pagination state is not mixed.
+On credential, quota or rate-limit errors, Pro marks the affected connection Needs attention and excludes it from selection. YouTube searches can switch Keys during pagination, channel lookup and continuation while retaining their conditions and progress. Each failed Key is tried at most once per switch sequence. Known Keys in the same exhausted Google Cloud project are paused together; unknown project identities remain unknown.
+
+Cookie-account searches can switch accounts before obtaining source data. After that point, the search and its continuations retain the original account.
 
 ### How does a connection become available again?
 

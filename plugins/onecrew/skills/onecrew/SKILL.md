@@ -29,7 +29,7 @@ For converting imported tables to standard fields in place, or converting Excel 
 
 For creator discovery, read [Creator discovery](references/creator-discovery.md). Search includes basic profiles and matched content. Check relevance and required conditions, assign 1–2 short evidence-based content tags, then score and save retained candidates with their creator and platform profile. Followers is optional. `limit` is a candidate target: default 20, range 1–100. Follow `poll_after_ms` and report actual saved and unverified counts.
 
-Run one search at a time across all keywords and platforms in the conversation. Wait for the active search to finish, fetch and process its results, then continue that search or start the next query. Keep query plans sequential, including searches delegated to other agents.
+Run one search at a time across keywords and platforms. Process useful unread cached candidates while the qualified target remains unmet, and stop when it is reached. Keep query plans sequential, including delegated searches. Paging and continuation are described in [Creator discovery](references/creator-discovery.md#cached-page-progress).
 
 For requested recent posts or an evaluation that needs recent evidence, read [Platform posts](references/platform-posts.md). Ordinary search does not require this follow-up. Use native account IDs from search results or saved records.
 
