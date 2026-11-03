@@ -90,4 +90,10 @@ Windows npm packages load runtime files from the package's `app` directory. Miss
 - Standalone Skills: update both directories from the selected commit, preserve local customizations, and update their source records. Keep the working MCP configuration.
 - The assistant executes the commands. On failure, diagnose and fix the path, arguments or environment, then retry and continue. Request needed permissions through the client. Independent HTTP version and existing MCP checks can continue while a CLI step is blocked. The user handles approvals, sign-in and required client restarts.
 
+For `EPERM` or `EACCES`, request access to the path in the error and continue in a newly authorized command. An already-running background service can retain the restrictions it started with. If an in-app update cannot write its install directory, use the installation prompt's npm branch and restart the service from the authorized environment, preserving its data directory. CLI updates from 0.1.24 run the updater in the calling command's environment.
+
+On macOS, 0.1.21 and earlier could write the runtime cache even for `--help` or `--version`; 0.1.22 removed those writes. A blocked CLI check does not invalidate a successful HTTP or MCP version check.
+
+If the updater exits unexpectedly, read the saved phase and `update.log`. A download-stage exit does not require data restoration. An exit during stopping, backup, startup or restoration requires recovery before installing again. An empty log does not identify the cause of exit.
+
 Report the application version, plugin version or standalone Skill source revision, and result of a real MCP call separately. If the client needs a restart or new conversation to load the plugin or Skills, complete that step before reporting them as loaded.
