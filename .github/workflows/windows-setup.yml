@@ -86,14 +86,43 @@ jobs:
           $env:ONECREW_TEST_ENTRY = Join-Path $PWD '.cache/候选 application/node_modules/@onecrew/pro/bin/onecrew-pro.cjs'
           $test = Join-Path $env:ONECREW_TEST_CANDIDATE 'app/windows-lifecycle.mjs'
           Copy-Item .cache/artifacts/windows-lifecycle.mjs $test
-          node $test
+          $compiler = Join-Path $env:SystemRoot 'Microsoft.NET/Framework64/v4.0.30319/csc.exe'
+          & $compiler /nologo /out:.cache/artifacts/windows-process-check.exe .cache/artifacts/windows-process-check.cs
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $sid = (& "$env:SystemRoot/System32/whoami.exe" /user /fo csv /nh | ConvertFrom-Csv -Header Name,Sid).Sid
+          $node = (Get-Command node.exe).Source
+          $runner = Join-Path $PWD '.cache/artifacts/windows-acceptance-runner.cjs'
+          $escape = { param($s) [System.Security.SecurityElement]::Escape($s) }
+          $xml = @"
+          <?xml version="1.0" encoding="UTF-16"?>
+          <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+          <Principals><Principal id="User"><UserId>$sid</UserId><LogonType>InteractiveToken</LogonType><RunLevel>LeastPrivilege</RunLevel></Principal></Principals>
+          <Settings><ExecutionTimeLimit>PT20M</ExecutionTimeLimit></Settings>
+          <Actions Context="User"><Exec><Command>$(& $escape $node)</Command><Arguments>"$(& $escape $runner)" "$(& $escape $env:ONECREW_TEST_GIT)"</Arguments><WorkingDirectory>$(& $escape $PWD.Path)</WorkingDirectory></Exec></Actions>
+          </Task>
+          "@
+          $xml | Set-Content .cache/acceptance-task.xml -Encoding Unicode
+          schtasks.exe /Create /TN OneCrewAcceptance /XML .cache/acceptance-task.xml /F
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          schtasks.exe /Run /TN OneCrewAcceptance
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $deadline = (Get-Date).AddMinutes(16)
+          while (!(Test-Path .cache/windows-acceptance-exit.json)) {
+            if ((Get-Date) -gt $deadline) { throw 'Native acceptance timed out' }
+            Start-Sleep -Seconds 3
+          }
+          Get-Content .cache/windows-acceptance-output.log
+          $result = Get-Content .cache/windows-acceptance-exit.json | ConvertFrom-Json
+          schtasks.exe /Delete /TN OneCrewAcceptance /F
+          if ($result.error) { throw $result.error }
+          exit $result.code
       - uses: actions/upload-artifact@v4
         if: always() && inputs.artifact_tag != ''
         with:
           name: windows-lifecycle-evidence
           path: |
             .cache/windows-lifecycle-report.json
+            .cache/windows-acceptance-output.log
             .cache/Windows */**/server.log
             .cache/Windows */**/update.log
             .cache/Windows */**/state.json
