@@ -1,0 +1,48 @@
+name: Windows setup acceptance
+on:
+  workflow_dispatch:
+    inputs:
+      pro_version:
+        description: Published npm package to test
+        required: true
+        default: '0.1.27'
+      binary_version:
+        description: Expected application version
+        required: true
+        default: '0.1.27'
+permissions:
+  contents: read
+jobs:
+  setup:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - name: Install WorkBuddy 5.9.3
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force .cache | Out-Null
+          $installer = Join-Path $PWD '.cache/WorkBuddy-5.9.3.exe'
+          Invoke-WebRequest 'https://acc-1258344699.cos.ap-guangzhou.myqcloud.com/workbuddy/saas/win32-x64-user/WorkBuddy-win32-x64-user-5.9.3.42398134-d4692421.exe' -OutFile $installer
+          $process = Start-Process -FilePath $installer -ArgumentList '/S' -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "WorkBuddy installation failed: $($process.ExitCode)" }
+          $cli = Join-Path $env:LOCALAPPDATA 'Programs/WorkBuddy/resources/app.asar.unpacked/cli/bin/codebuddy'
+          if (!(Test-Path -LiteralPath $cli)) { throw "WorkBuddy CLI missing: $cli" }
+          "ONECREW_TEST_GIT=$((Get-Command git.exe).Source)" >> $env:GITHUB_ENV
+      - name: Install public Pro packages
+        shell: pwsh
+        env:
+          PRO_VERSION: ${{ inputs.pro_version }}
+        run: |
+          npm install --prefix .cache/candidate "@onecrew/pro@$env:PRO_VERSION" --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm install --prefix .cache/baseline '@onecrew/pro@0.1.27' --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Verify native startup and WorkBuddy setup
+        env:
+          ONECREW_TEST_VERSION: ${{ inputs.binary_version }}
+        run: node --test tests/windows-setup.mjs
