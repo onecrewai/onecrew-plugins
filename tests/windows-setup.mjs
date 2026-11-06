@@ -67,14 +67,17 @@ test('native service starts without PowerShell on PATH and survives the launcher
   await verifyMcp(data, restricted);
 });
 
-for (const upgrade of [false, true]) {
-  test(`${upgrade ? 'upgrade' : 'fresh'} WorkBuddy setup without LOCALAPPDATA or PowerShell on PATH`, { timeout: 600000 }, async t => {
+for (const scenario of ['fresh', 'running', 'stopped']) {
+  test(`${scenario} WorkBuddy setup without LOCALAPPDATA or PowerShell on PATH`, { timeout: 600000 }, async t => {
+    const upgrade = scenario !== 'fresh';
     const { directory, data, full, restricted } = await profile(t);
     let previous;
     if (upgrade) {
       const old = JSON.parse((await run(process.execPath, [path.join(baseline, 'bin/onecrew-pro.cjs'), 'setup', '--client', 'mcp', '--mcp-config', path.join(directory, 'mcp.json'), '--skills-dir', path.join(directory, 'skills'), '--port', '0'], full)).stdout);
       assert.equal(old.state, 'ready');
       previous = old.service;
+      if (scenario === 'stopped')
+        await run(process.execPath, [path.join(baseline, 'bin/onecrew-pro.cjs'), 'stop'], full);
     }
     const clientDirectory = path.join(directory, 'workbuddy');
     await mkdir(clientDirectory);
