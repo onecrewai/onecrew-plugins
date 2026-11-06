@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --ignore-scripts
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         id: workbuddy
         with:
           path: .cache/WorkBuddy-5.9.3.exe
@@ -34,6 +34,11 @@ jobs:
           New-Item -ItemType Directory -Force .cache | Out-Null
           curl.exe --fail --location --retry 2 --output .cache/WorkBuddy-5.9.3.exe 'https://acc-1258344699.cos.ap-guangzhou.myqcloud.com/workbuddy/saas/win32-x64-user/WorkBuddy-win32-x64-user-5.9.3.42398134-d4692421.exe'
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/cache/save@v4
+        if: steps.workbuddy.outputs.cache-hit != 'true'
+        with:
+          path: .cache/WorkBuddy-5.9.3.exe
+          key: workbuddy-win-5.9.3.42398134-d4692421
       - name: Install WorkBuddy 5.9.3
         shell: pwsh
         run: |
