@@ -1,10 +1,22 @@
 # Installation paths and versions
 
+## Install and connect
+
+Pro 0.1.27+ provides `onecrew-pro setup --client codex` and `onecrew-pro setup --client workbuddy`. Use the npm version selected by the installation guide. For a first installation, invoke that version through `npm exec --yes --package=@onecrew/pro@<version> -- onecrew-pro setup --client <client>`.
+
+Setup installs a persistent npm copy, preserves the data directory, installs the plugin or Skills, and checks HTTP and MCP. Pass `--data-dir` for an existing custom profile. WorkBuddy accepts `--client-dir` and `--client-cli` when its active installation cannot be identified. Other MCP clients use `--client mcp --mcp-config <file> --skills-dir <directory>` with their actual JSON/JSONC configuration and Skill directory.
+
+Read the returned `completed`, `step`, `error`, service version and client result. Correct the reported problem and repeat setup. The script reuses completed installation and configuration. Client trust, reload and sign-in are reported separately from the script's MCP verification.
+
+When `onecrew_runtime` is available, use `status` or `diagnose` for service state. Call `start` when a requested operation needs the stopped service, refresh tools, then continue. A running service is reused.
+
 ## Locate the current installation
 
-Read the current client's OneCrew MCP configuration first. Keep its executable path, data directory and environment. Codex's `ONECREW_BINARY` and the WorkBuddy plugin's `binary_path` / `data_dir` can point to custom locations.
+Read the current client's OneCrew MCP configuration for its data directory and environment. OneCrew Pro uses npm installation. Set Codex's `ONECREW_BINARY` or WorkBuddy's `binary_path` to the native path returned by that installation's `onecrew-pro --print-binary-path`.
 
-For an npm installation, use the Node/npm environment that owns that installation.
+Use the Node/npm environment that owns the installation. Desktop clients may not inherit the terminal's PATH; an absolute native path avoids that dependency.
+
+Setup keeps its npm copy under `OneCrewPro/npm` in the installation root below. `setup.json` records the selected data profile and `node-path` records the Node executable. The Codex launcher uses these when `ONECREW_BINARY` is unset, then checks PATH. WorkBuddy receives explicit binary and data paths in its plugin settings.
 
 macOS:
 

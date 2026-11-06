@@ -14,7 +14,8 @@
         "PATHEXT",
         "PATH",
         "ONECREW_BINARY",
-        "ONECREW_DATA_DIR"
+        "ONECREW_DATA_DIR",
+        "ONECREW_INSTALL_DIR"
       ]
     }
   }

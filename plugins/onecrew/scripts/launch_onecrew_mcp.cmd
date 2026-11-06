@@ -4,12 +4,21 @@ setlocal DisableDelayedExpansion
 if defined ONECREW_BINARY (
   set "ONECREW_MCP_EXE=%ONECREW_BINARY%"
 ) else (
+  if not defined ONECREW_INSTALL_DIR set "ONECREW_INSTALL_DIR=%LOCALAPPDATA%\OneCrewPro"
+  goto installed
+)
+goto explicit
+
+:installed
+if exist "%ONECREW_INSTALL_DIR%\node-path" if exist "%ONECREW_INSTALL_DIR%\npm\node_modules\@onecrew\pro\bin\onecrew-pro.cjs" (
+  set /p ONECREW_NODE=<"%ONECREW_INSTALL_DIR%\node-path"
+  goto prepared
+)
   for %%I in (onecrew-pro.cmd) do set "ONECREW_NPM_CMD=%%~$PATH:I"
   if defined ONECREW_NPM_CMD goto npm
-  if not defined LOCALAPPDATA goto missing
-  set "ONECREW_MCP_EXE=%LOCALAPPDATA%\Programs\OneCrewConnect\onecrew.exe"
-)
+  goto missing
 
+:explicit
 if not "%ONECREW_MCP_EXE:~1,2%"==":\" if not "%ONECREW_MCP_EXE:~1,2%"==":/" if not "%ONECREW_MCP_EXE:~0,2%"=="\\" goto invalid
 if not exist "%ONECREW_MCP_EXE%" goto missing
 
@@ -17,6 +26,12 @@ rem Release the plugin cache working directory before the long-running process.
 cd /d "%SystemRoot%"
 if errorlevel 1 exit /b 1
 "%ONECREW_MCP_EXE%" mcp
+exit /b %ERRORLEVEL%
+
+:prepared
+cd /d "%SystemRoot%"
+if errorlevel 1 exit /b 1
+"%ONECREW_NODE%" "%ONECREW_INSTALL_DIR%\npm\node_modules\@onecrew\pro\bin\onecrew-pro.cjs" mcp
 exit /b %ERRORLEVEL%
 
 :npm

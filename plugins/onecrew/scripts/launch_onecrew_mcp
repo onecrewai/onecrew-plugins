@@ -1,16 +1,19 @@
 #!/bin/sh
 set -eu
 
+install_root=${ONECREW_INSTALL_DIR:-"$HOME/Library/Application Support/OneCrewPro"}
+entry="$install_root/npm/node_modules/@onecrew/pro/bin/onecrew-pro.cjs"
 if [ -n "${ONECREW_BINARY:-}" ]; then
   executable=$ONECREW_BINARY
+elif [ -f "$install_root/node-path" ] && [ -f "$entry" ]; then
+  IFS= read -r node_executable < "$install_root/node-path"
+  cd /
+  exec "$node_executable" "$entry" mcp
 elif executable=$(command -v onecrew-pro); then
   :
 else
-  if [ -z "${HOME:-}" ]; then
-    printf '%s\n' 'OneCrew could not locate your home directory.' >&2
-    exit 127
-  fi
-  executable="$HOME/Applications/OneCrewConnect/onecrew"
+  printf '%s\n' 'onecrew-pro is not on PATH. Install @onecrew/pro with npm, or set ONECREW_BINARY to the native path returned by onecrew-pro --print-binary-path.' >&2
+  exit 127
 fi
 
 case "$executable" in

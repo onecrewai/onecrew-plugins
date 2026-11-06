@@ -37,7 +37,10 @@ test('real service connects through the selected installation launchers', {timeo
   const install = windows ? path.join(home, 'Programs/OneCrewConnect') : path.join(home, 'Applications/OneCrewConnect');
   await mkdir(install, {recursive: true});
   await cp(binary, path.join(install, windows ? 'onecrew.exe' : 'onecrew'));
-  const service = spawn(binary, ['serve', '--data-dir', profile, '--port', '0'], {stdio: ['ignore', 'pipe', 'pipe']});
+  const environment = {...process.env, ONECREW_INSTALL_DIR: path.join(directory, 'application')};
+  delete environment.ONECREW_RUNTIME_FILE;
+  delete environment.ONECREW_BINARY;
+  const service = spawn(binary, ['serve', '--data-dir', profile, '--port', '0'], {env: environment, stdio: ['ignore', 'pipe', 'pipe']});
   let logs = '';
   service.stdout.on('data', chunk => {logs += chunk;});
   service.stderr.on('data', chunk => {logs += chunk;});
@@ -58,7 +61,7 @@ test('real service connects through the selected installation launchers', {timeo
   assert.equal(response.status, 200);
   const current = await response.json();
   const launcher = path.join(plugin, `scripts/launch_onecrew_mcp${windows ? '.cmd' : ''}`);
-  const baseEnv = {...process.env, ONECREW_DATA_DIR: profile, HOME: home, USERPROFILE: home, LOCALAPPDATA: home};
+  const baseEnv = {...environment, ONECREW_DATA_DIR: profile, HOME: home, USERPROFILE: home, LOCALAPPDATA: home};
   delete baseEnv.ONECREW_BINARY;
   delete baseEnv.ONECREW_RUNTIME_FILE;
   const systemPath = windows
@@ -66,12 +69,18 @@ test('real service connects through the selected installation launchers', {timeo
     : '/usr/bin:/bin:/usr/sbin:/sbin';
   const modes = [
     ['explicit', {...baseEnv, PATH: systemPath, ONECREW_BINARY: binary}],
-    ['zip', {...baseEnv, PATH: systemPath}],
-    ['workbuddy', {...process.env, PATH: systemPath}],
+    ['workbuddy', {...environment, PATH: systemPath}],
   ];
   if (process.env.ONECREW_TEST_NPM === '1') modes.push(
-    ['npm', {...baseEnv, HOME: path.join(directory, 'no-zip-home'), LOCALAPPDATA: path.join(directory, 'no-zip-home')}],
+    ['npm', baseEnv],
   );
+  const missingClient = new Client({name: 'no-npm-entry', version: '1.0.0'});
+  const missingTransport = new StdioClientTransport({command: launcher, args: [], env: {...baseEnv, PATH: systemPath}, stderr: 'pipe'});
+  let missingError = '';
+  missingTransport.stderr?.on('data', chunk => {missingError += chunk;});
+  await assert.rejects(missingClient.connect(missingTransport), 'A leftover standalone executable must not be selected when npm is absent');
+  assert.match(missingError, /Install @onecrew\/pro/);
+  await missingClient.close();
   for (const [mode, env] of modes) {
     const client = new Client({name: `onecrew-${mode}-check`, version: '1.0.0'});
     let command = launcher;

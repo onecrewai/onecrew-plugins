@@ -9,6 +9,8 @@ Follow the user's language for replies and user-facing content unless they reque
 
 For installation paths, application or plugin version checks, or application updates, read [Installation and versions](references/installation-and-versions.md).
 
+If only `onecrew_runtime` is available, use `status` or `diagnose` to inspect the local service. For a request that needs OneCrew, call `start` when stopped, then refresh the tool list and continue the request. Report the returned error if startup fails.
+
 For plugin installation, updates or reinstallation, use the current client's plugin manager. Codex-specific steps are in [Plugin updates](references/plugin-update.md).
 
 Read search platform connection status with `platform_connection_list`. Use `available`, `unavailable_reason`, `expires_at` and `last_checked_at` when returned. The list reads local records without making a new provider request. `connected` alone does not establish current usability.

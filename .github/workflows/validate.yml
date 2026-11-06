@@ -7,7 +7,7 @@ on:
       pro_version:
         description: Published npm version to verify
         required: true
-        default: '0.1.14'
+        default: '0.1.26'
 permissions:
   contents: read
 jobs:
@@ -22,17 +22,12 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --ignore-scripts
-      - name: Prepare published ZIP
-        if: github.event_name != 'workflow_dispatch'
-        run: node tests/prepare-release.mjs
       - name: Install published npm package
-        if: github.event_name == 'workflow_dispatch'
         shell: bash
         env:
-          PRO_VERSION: ${{ inputs.pro_version }}
+          PRO_VERSION: ${{ inputs.pro_version || '0.1.26' }}
         run: npm install --global "@onecrew/pro@$PRO_VERSION" --ignore-scripts --registry=https://registry.npmjs.org/
       - name: Locate installed binary
-        if: github.event_name == 'workflow_dispatch'
         shell: bash
         run: |
           echo "ONECREW_TEST_BINARY=$(onecrew-pro --print-binary-path)" >> "$GITHUB_ENV"

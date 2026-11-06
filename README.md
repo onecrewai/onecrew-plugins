@@ -1,6 +1,6 @@
 # OneCrew
 
-OneCrew plugin marketplace for Codex and WorkBuddy desktop. Includes the local OneCrew MCP connection and the OneCrew and OneCrew web research Skills. Install and start the OneCrew application before using the plugin.
+OneCrew plugin marketplace for Codex and WorkBuddy desktop. Includes the local OneCrew MCP connection and the OneCrew and OneCrew web research Skills. Pro 0.1.27+ provides `onecrew-pro setup --client codex|workbuddy` for application and plugin setup. The stdio bridge exposes `onecrew_runtime` to start a stopped service.
 
 For agents installing OneCrew Pro or connecting WorkBuddy and other MCP clients, read [Agent setup and shared Skill workflows](docs/agent-setup.md).
 
@@ -11,7 +11,7 @@ codex plugin marketplace add onecrewai/onecrew-plugins
 codex plugin add onecrew@onecrew
 ```
 
-Use Codex and OneCrew on the same computer. Select your operating system and installation method on the [Pro installation page](https://onecrewai.io/en/product/onecrew-pro#install), then start a new Codex conversation after plugin installation.
+Use Codex and OneCrew on the same computer. Select your operating system on the [Pro npm installation page](https://onecrewai.io/en/product/onecrew-pro#install), then start a new Codex conversation after plugin installation.
 
 To use OneCrew in Codex, type `@` in the chat input, select **OneCrew**, then enter your request.
 
