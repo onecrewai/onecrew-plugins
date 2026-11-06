@@ -82,7 +82,8 @@ for (const scenario of ['fresh', 'running', 'stopped']) {
     const clientDirectory = path.join(directory, 'workbuddy');
     await mkdir(clientDirectory);
     await writeFile(path.join(clientDirectory, 'settings.json'), '{"language":"zh-CN"}\n');
-    const args = [entry, 'setup', '--client', 'workbuddy', '--client-dir', clientDirectory, ...(upgrade ? [] : ['--port', '0'])];
+    const port = scenario === 'stopped' ? ['--port', new URL(previous.url).port] : upgrade ? [] : ['--port', '0'];
+    const args = [entry, 'setup', '--client', 'workbuddy', '--client-dir', clientDirectory, ...port];
     const first = JSON.parse((await run(process.execPath, args, restricted)).stdout);
     assert.equal(first.state, 'ready');
     assert.equal(first.service.version, version);
