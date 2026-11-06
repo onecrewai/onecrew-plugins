@@ -124,6 +124,7 @@ jobs:
         if: always() && inputs.artifact_tag != ''
         with:
           name: windows-lifecycle-evidence
+          include-hidden-files: true
           path: |
             .cache/windows-lifecycle-report.json
             .cache/windows-acceptance-output.log
