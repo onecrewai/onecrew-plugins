@@ -89,7 +89,9 @@ jobs:
           $test = Join-Path $env:ONECREW_TEST_CANDIDATE 'app/windows-lifecycle.mjs'
           Copy-Item .cache/artifacts/windows-lifecycle.mjs $test
           $compiler = Join-Path $env:SystemRoot 'Microsoft.NET/Framework64/v4.0.30319/csc.exe'
-          & $compiler /nologo /out:.cache/artifacts/windows-process-check.exe .cache/artifacts/windows-process-check.cs
+          $source = Join-Path $PWD '.cache\artifacts\windows-process-check.cs'
+          $compiled = Join-Path $PWD '.cache\artifacts\windows-process-check.exe'
+          & $compiler /nologo "/out:$compiled" $source
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $sid = (& "$env:SystemRoot/System32/whoami.exe" /user /fo csv /nh | ConvertFrom-Csv -Header Name,Sid).Sid
           $node = (Get-Command node.exe).Source
