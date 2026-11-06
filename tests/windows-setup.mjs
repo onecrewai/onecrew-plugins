@@ -18,7 +18,10 @@ const baseline = path.resolve('.cache/baseline/node_modules/@onecrew/pro');
 const entry = path.join(candidate, 'bin/onecrew-pro.cjs');
 const binary = path.join(path.dirname(createRequire(path.join(candidate, 'package.json')).resolve('@onecrew/pro-win32-x64/package.json')), 'onecrew.exe');
 const powershell = path.join(process.env.SystemRoot, 'System32/WindowsPowerShell/v1.0/powershell.exe');
-const run = (file, args, env = process.env) => execute(file, args, { env, timeout: 240000, maxBuffer: 4 * 1024 * 1024, windowsHide: true });
+const run = (file, args, env = process.env) => execute(file, args, { env, timeout: 240000, maxBuffer: 4 * 1024 * 1024, windowsHide: true }).catch(error => {
+  error.message += `\n${error.stdout ?? ''}`;
+  throw error;
+});
 const ps = command => run(powershell, ['-NoProfile', '-NonInteractive', '-Command', `$ErrorActionPreference='Stop'; ${command}`]);
 const sid = (await ps('[Security.Principal.WindowsIdentity]::GetCurrent().User.Value')).stdout.trim();
 assert.match(sid, /^S-1-\d+(?:-\d+)+$/);
