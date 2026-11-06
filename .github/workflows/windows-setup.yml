@@ -10,6 +10,9 @@ on:
         description: Expected application version
         required: true
         default: '0.1.27'
+      artifact_tag:
+        description: Draft release containing unpublished Windows acceptance artifacts
+        required: false
 permissions:
   contents: read
 jobs:
@@ -50,6 +53,7 @@ jobs:
           if (!(Test-Path -LiteralPath $cli)) { throw "WorkBuddy CLI missing: $cli" }
           "ONECREW_TEST_GIT=$((Get-Command git.exe).Source)" >> $env:GITHUB_ENV
       - name: Install public Pro packages
+        if: inputs.artifact_tag == ''
         shell: pwsh
         env:
           PRO_VERSION: ${{ inputs.pro_version }}
@@ -59,6 +63,38 @@ jobs:
           npm install --prefix .cache/baseline '@onecrew/pro@0.1.27' --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Verify native startup and WorkBuddy setup
+        if: inputs.artifact_tag == ''
         env:
           ONECREW_TEST_VERSION: ${{ inputs.binary_version }}
         run: node --test tests/windows-setup.mjs
+      - name: Download unpublished acceptance artifacts
+        if: inputs.artifact_tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_TAG: ${{ inputs.artifact_tag }}
+        run: gh release download "$env:ARTIFACT_TAG" --dir .cache/artifacts
+      - name: Install and verify unpublished Windows runtime
+        if: inputs.artifact_tag != ''
+        shell: pwsh
+        run: |
+          $packages = @(Get-ChildItem .cache/artifacts/*.tgz | ForEach-Object FullName)
+          npm install --prefix '.cache/候选 application' @packages --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm install --prefix .cache/baseline '@onecrew/pro@0.1.26' --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:ONECREW_TEST_CANDIDATE = Join-Path $PWD '.cache/候选 application/node_modules/@onecrew/pro-win32-x64'
+          $env:ONECREW_TEST_ENTRY = Join-Path $PWD '.cache/候选 application/node_modules/@onecrew/pro/bin/onecrew-pro.cjs'
+          $test = Join-Path $env:ONECREW_TEST_CANDIDATE 'app/windows-lifecycle.mjs'
+          Copy-Item .cache/artifacts/windows-lifecycle.mjs $test
+          node $test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        if: always() && inputs.artifact_tag != ''
+        with:
+          name: windows-lifecycle-evidence
+          path: |
+            .cache/windows-lifecycle-report.json
+            .cache/Windows */**/server.log
+            .cache/Windows */**/update.log
+            .cache/Windows */**/state.json
+            .cache/Windows */**/windows-task.json
