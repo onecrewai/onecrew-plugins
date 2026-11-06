@@ -22,13 +22,24 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --ignore-scripts
-      - name: Install WorkBuddy 5.9.3
+      - uses: actions/cache@v4
+        id: workbuddy
+        with:
+          path: .cache/WorkBuddy-5.9.3.exe
+          key: workbuddy-win-5.9.3.42398134-d4692421
+      - name: Download WorkBuddy 5.9.3
+        if: steps.workbuddy.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force .cache | Out-Null
+          curl.exe --fail --location --retry 2 --output .cache/WorkBuddy-5.9.3.exe 'https://acc-1258344699.cos.ap-guangzhou.myqcloud.com/workbuddy/saas/win32-x64-user/WorkBuddy-win32-x64-user-5.9.3.42398134-d4692421.exe'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Install WorkBuddy 5.9.3
+        shell: pwsh
+        run: |
           $installer = Join-Path $PWD '.cache/WorkBuddy-5.9.3.exe'
-          Invoke-WebRequest 'https://acc-1258344699.cos.ap-guangzhou.myqcloud.com/workbuddy/saas/win32-x64-user/WorkBuddy-win32-x64-user-5.9.3.42398134-d4692421.exe' -OutFile $installer
-          $process = Start-Process -FilePath $installer -ArgumentList '/S' -Wait -PassThru
+          $process = Start-Process -FilePath $installer -ArgumentList '/S' -PassThru
+          if (!$process.WaitForExit(180000)) { throw 'WorkBuddy installer did not exit within 3 minutes' }
           if ($process.ExitCode -ne 0) { throw "WorkBuddy installation failed: $($process.ExitCode)" }
           $cli = Join-Path $env:LOCALAPPDATA 'Programs/WorkBuddy/resources/app.asar.unpacked/cli/bin/codebuddy'
           if (!(Test-Path -LiteralPath $cli)) { throw "WorkBuddy CLI missing: $cli" }
