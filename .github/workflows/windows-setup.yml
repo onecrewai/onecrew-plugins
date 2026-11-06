@@ -17,6 +17,8 @@ permissions:
   contents: read
 jobs:
   setup:
+    permissions:
+      contents: write
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
