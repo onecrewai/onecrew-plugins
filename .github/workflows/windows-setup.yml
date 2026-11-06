@@ -10,6 +10,10 @@ on:
         description: Expected application version
         required: true
         default: '0.1.27'
+      baseline_version:
+        description: Published npm package to upgrade from
+        required: false
+        default: '0.1.27'
       artifact_tag:
         description: Draft release containing unpublished Windows acceptance artifacts
         required: false
@@ -59,10 +63,11 @@ jobs:
         shell: pwsh
         env:
           PRO_VERSION: ${{ inputs.pro_version }}
+          BASELINE_VERSION: ${{ inputs.baseline_version }}
         run: |
           npm install --prefix .cache/candidate "@onecrew/pro@$env:PRO_VERSION" --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          npm install --prefix .cache/baseline '@onecrew/pro@0.1.27' --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
+          npm install --prefix .cache/baseline "@onecrew/pro@$env:BASELINE_VERSION" --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Verify native startup and WorkBuddy setup
         if: inputs.artifact_tag == ''
