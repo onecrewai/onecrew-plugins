@@ -13,6 +13,11 @@
         "COMSPEC",
         "PATHEXT",
         "PATH",
+        "DOCKER_HOST",
+        "DOCKER_CONTEXT",
+        "DOCKER_CONFIG",
+        "DOCKER_TLS_VERIFY",
+        "DOCKER_CERT_PATH",
         "ONECREW_CONTAINER_RUNTIME",
         "ONECREW_CONTAINER_NAME"
       ]

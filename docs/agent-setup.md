@@ -1,17 +1,26 @@
 # OneCrew setup
 
-- Normal container setup: [Container installation](../plugins/onecrew/skills/onecrew/references/container-installation.md).
-- Existing native installation: [Native-to-container case](../plugins/onecrew/skills/onecrew/references/native-to-container.md).
-- Application, image and instruction versions: [Installation and versions](../plugins/onecrew/skills/onecrew/references/installation-and-versions.md).
+Use the AI client's terminal, file and HTTP tools for installation. Fetch these
+documents with its HTTP tool or `curl`; use an existing working directory for
+commands. Use OneCrew MCP for application status and data checks.
 
-Configure and start the container first, then install or enable the OneCrew plugin
-with its bundled MCP server and Skills. Preserve unrelated settings and verify
-actual HTTP and MCP responses. Clients without plugin support use direct MCP and
-the two complete shared Skill directories.
+Use the application and image listed in the container guide. Install the plugin
+and Skills from the same repository commit as this guide: take the commit from
+its URL, or run `git rev-parse HEAD` in the checkout used to read it.
 
-## Workflows
+1. Read [Container installation](../plugins/onecrew/skills/onecrew/references/container-installation.md)
+   to locate the container runtime and configure Pro.
+2. For an existing native installation, complete the stop and backup steps in
+   [Native-to-container](../plugins/onecrew/skills/onecrew/references/native-to-container.md)
+   before starting the container. Use [Installation and versions](../plugins/onecrew/skills/onecrew/references/installation-and-versions.md)
+   to locate an existing installation or check its versions.
+3. Follow the container guide's connection steps for the current AI client.
+   WorkBuddy desktop uses [WorkBuddy setup](../plugins/onecrew/skills/onecrew/references/workbuddy-setup.md).
+   Clients without plugin support use its standard MCP and shared Skills section.
 
-- [OneCrew](../plugins/onecrew/skills/onecrew/SKILL.md): creators, platform connections, tables, leads and email.
-- [OneCrew web research](../plugins/onecrew/skills/onecrew-web-research/SKILL.md): requested public webpage search and extraction.
+Run the installation and checks. Fix path, argument or environment errors and
+continue. Use the client's permission flow for access errors, then resume the
+affected step. Continue independent checks. Report the application version,
+plugin or Skill revision, panel address and MCP results.
 
-Use current tool schemas and the client's supported Skill selection interface.
+Preserve existing data, sign-in and unrelated client settings.

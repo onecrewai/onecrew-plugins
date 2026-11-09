@@ -14,5 +14,6 @@ connection. Do not replace it with a second manual server or a cached-manifest e
 For standalone Skills, update both complete directories and their references,
 preserve local customizations, and record the source commit.
 
-Reload the client's instructions and MCP connection as required. Verify one
-read-only `account status` call and report any conversation reload still pending.
+Restart the client's OneCrew MCP connection and reload its Skills. In Codex, open
+a new conversation after changing the plugin. Call `account` with `action:
+"version"` and `action: "status"` through the client. Report the values returned.

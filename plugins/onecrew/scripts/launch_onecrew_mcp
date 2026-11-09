@@ -4,11 +4,9 @@ set -eu
 cd /
 if [ -n "${ONECREW_CONTAINER_RUNTIME:-}" ]; then
   runtime=$ONECREW_CONTAINER_RUNTIME
-elif [ -x "$HOME/.kiri/bin/kiri" ]; then
-  runtime="$HOME/.kiri/bin/kiri"
 else
-  runtime=$(command -v kiri) || {
-    printf '%s\n' 'Kiri is unavailable. Configure ONECREW_CONTAINER_RUNTIME with its absolute executable path.' >&2
+  runtime=$(command -v docker) || {
+    printf '%s\n' 'Docker CLI is unavailable. Set ONECREW_CONTAINER_RUNTIME to the absolute path of a Docker-compatible CLI.' >&2
     exit 127
   }
 fi

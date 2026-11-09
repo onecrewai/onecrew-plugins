@@ -6,8 +6,8 @@ For an existing native installation, read [the migration case](native-to-contain
 ## Locate the active installation
 
 Read the installed plugin's MCP declaration and resolved options to identify the
-container runtime and container name. Read the saved Compose configuration or
-inspect that container to identify the host data mount and published local port.
+container runtime and container name. Inspect that container to identify the
+host data mount and published local port.
 The executable path should be absolute; changing system PATH is unnecessary.
 
 The data directory is on the host. `/data` is its container mount, and
@@ -19,7 +19,7 @@ contains a private control token and should not be printed.
 | Component | Read from | Meaning |
 | --- | --- | --- |
 | Running application | MCP `account version`, or local `GET /api/v1/access/version` | Application serving requests; container mode reports `deployment: "container"` |
-| Image | Saved Compose image reference and runtime image ID/digest | The packaged runtime used by the container |
+| Image | Container `Config.Image`, image ID and `RepoDigests` | The packaged runtime used by the container |
 | Installed plugin | Client installation record and that installation's `plugin.json` | Plugin bundle revision, independent of the application |
 | Standalone Skills | Source commit or local `SOURCE.md` | Revision of copied instructions; no separate plugin version |
 
