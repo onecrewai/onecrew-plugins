@@ -1,6 +1,6 @@
 # OneCrew Pro FAQ
 
-Product behavior: Pro 0.1.23. External documentation checked on October 29, 2026.
+External documentation checked on October 29, 2026.
 
 ## Account connections
 
@@ -9,7 +9,7 @@ Product behavior: Pro 0.1.23. External documentation checked on October 29, 2026
 | Feature | Connection | Setup location |
 | --- | --- | --- |
 | OneCrew workspace and MCP | OneCrew sign-in | The `login_url` returned by `account` |
-| X, Instagram, Facebook, TikTok | A signed-in browser session, imported as Cookie-Editor JSON or read from a browser profile | Accounts → platform → Connect / Add account |
+| X, Instagram, Facebook, TikTok | A signed-in browser session, imported as Cookie-Editor JSON | Accounts → platform → Connect / Add account |
 | YouTube public creator search | YouTube Data API v3 API Key | Accounts → YouTube → Connect / Add key |
 | Sending email and synchronizing replies | A supported mailbox connection | Email → Manage mailboxes |
 
@@ -19,7 +19,7 @@ These connections are separate. Signing in to OneCrew does not connect a social 
 
 ### How do I connect a Cookie account?
 
-Open Accounts, choose the platform, select Connect or Add account, then Manual import. The first account for a platform shows an account usage reminder; Continue connecting becomes available after three seconds.
+Open Accounts, choose the platform, and select Connect or Add account. The first account for a platform shows an account usage reminder; Continue connecting becomes available after three seconds.
 
 1. **Install.** Open the desktop Chrome or Edge profile already signed in to the intended account, or the profile you plan to use. Install Cookie-Editor there: [Chrome Web Store](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm) or [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/cookieeditor/neaplmfkghagebokkhpjpoebhdledlfi). OneCrew's Copy store URL button lets you paste the address into that browser. The extension runs in Chrome or Edge, outside the AI client's embedded browser.
 2. **Open.** Visit the platform's main website in the same profile and check the active account. Sign in only if needed. At the top right of the browser, open Extensions (the puzzle icon) → Cookie-Editor. If it asks for access, select This site and approve. If the cookie list is already visible, continue directly to Export.
@@ -38,12 +38,6 @@ Cookie-Editor's [official website](https://cookie-editor.com/) documents its too
 ### Where should I paste cookies and API Keys?
 
 Cookie JSON and API Keys go into their fields in the local OneCrew Web panel. MCP shows masked connection information and provides the panel link; it does not accept these credentials for account setup. Cookies, keys, passwords and proxy credentials should stay out of chat and screenshots.
-
-### Can OneCrew read my browser profile directly?
-
-Read from browser supports detected Chrome and Edge profiles. Select the profile containing the intended platform session, read and verify its identity, then confirm the connection. macOS may display a system Keychain permission prompt.
-
-Cookie file locks, access permissions and unsupported browser encryption can prevent automatic reading. Manual import uses the browser extension's export and remains the available connection method in those cases. Closing a browser does not resolve unsupported encryption. Browser protection settings do not need to be disabled for manual import.
 
 ### Why did importing cookies fail?
 
@@ -128,6 +122,14 @@ Waiting for `retry_at` alone does not clear the saved Needs attention state.
 Connection lists show local records and the last check time. Reading the list does not contact the provider. Where returned, `available` includes the recorded connection state, Cookie expiry and participation setting; `unavailable_reason` distinguishes expired, paused and Needs attention. A Cookie session whose recorded expiry has passed is excluded from searches. An older application may still display its last Connected status.
 
 ## Other Pro questions
+
+### Why does the local page refuse connections after restarting the computer?
+
+Restarting the computer ends the local OneCrew process. `ERR_CONNECTION_REFUSED` at `127.0.0.1` means the page cannot connect to the local service. Check whether OneCrew is running and which port it uses before checking sign-in or platform accounts.
+
+The assistant uses `onecrew_runtime` with `status` or `diagnose`, starts the service when stopped, then refreshes the tools and opens the returned local URL. If that tool is unavailable, invoke the configured executable by its absolute path with `status` or `start` and the existing data directory; see [Installation and versions](installation-and-versions.md#locate-the-current-installation). After startup, check HTTP and MCP. Report the actual error if startup fails. Saved accounts and workspace data are preserved.
+
+On Windows, the configured `onecrew.exe` can run without adding OneCrew to the system or user PATH. A shell reporting that `onecrew-pro` is not found only means it cannot resolve that command; check the service through its configured executable or HTTP address.
 
 ### Why can a configured email sender have an OAuth error?
 

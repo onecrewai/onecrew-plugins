@@ -14,7 +14,7 @@ When `onecrew_runtime` is available, use `status` or `diagnose` for service stat
 
 Read the current client's OneCrew MCP configuration for its data directory and environment. OneCrew Pro uses npm installation. Set Codex's `ONECREW_BINARY` or WorkBuddy's `binary_path` to the native path returned by that installation's `onecrew-pro --print-binary-path`.
 
-Use the Node/npm environment that owns the installation. Desktop clients may not inherit the terminal's PATH; an absolute native path avoids that dependency.
+Use the native executable already recorded in the client's OneCrew configuration for status and startup. System or user PATH changes are unnecessary. When locating an npm installation, use the Node/npm environment that owns it. Desktop clients may have a different PATH from the terminal.
 
 Setup keeps its npm copy under `OneCrewPro/npm` in the installation root below. `setup.json` records the selected data profile and `node-path` records the Node executable. The Codex launcher uses these when `ONECREW_BINARY` is unset, then checks PATH. WorkBuddy receives explicit binary and data paths in its plugin settings.
 
@@ -27,14 +27,20 @@ onecrew-pro status
 npm ls --global @onecrew/pro --depth=0 --json
 ```
 
-Windows:
+Windows: read `binaryPath` and `dataDir` from the current client's OneCrew configuration. `binaryPath` is the absolute path to `onecrew.exe`. In PowerShell:
 
 ```powershell
-onecrew-pro.cmd --print-binary-path
-onecrew-pro.cmd --version
-onecrew-pro.cmd status
-npm.cmd ls --global @onecrew/pro --depth=0 --json
+& $binaryPath --version
+& $binaryPath status --data-dir $dataDir
 ```
+
+If the service is stopped:
+
+```powershell
+& $binaryPath start --data-dir $dataDir
+```
+
+A tool that launches executables directly can use the same absolute path and argument list. If `onecrew-pro` is not found, inspect the configured executable and service status; the missing shell shortcut does not establish that OneCrew is uninstalled or stopped. `--print-binary-path` belongs to the npm entry (`onecrew-pro.cmd` on Windows), not the native executable; invoke that entry by its absolute path when needed.
 
 Pass the configured `--data-dir` or `ONECREW_DATA_DIR` to `status`. Use the local address and port it reports.
 

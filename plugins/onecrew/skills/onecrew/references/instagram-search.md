@@ -1,6 +1,6 @@
 # Instagram creator search
 
-Connect Instagram in the Web Accounts panel using manual import or browser-profile reading. The saved session and stable device state are managed internally. MCP cannot import cookies, select an acting account, open a login flow or configure a proxy.
+Connect Instagram in the Web Accounts panel by importing Cookie-Editor JSON. The saved session and stable device state are managed internally. MCP cannot import cookies, select an acting account, open a login flow or configure a proxy.
 
 Example creation:
 
