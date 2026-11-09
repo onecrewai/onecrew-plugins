@@ -32,7 +32,7 @@ For container installation, see [Container installation](container-installation.
    then add this checkout with `plugin marketplace add "<source-dir>"`.
 3. Install with `plugin install onecrew@onecrew --scope user`. For an installed
    plugin from the selected source, use `plugin update onecrew@onecrew --scope user`.
-   Confirm `plugin list --json` reports version `0.1.23` and the installed files
+   Confirm `plugin list --json` reports version `0.1.24` and the installed files
    match the selected source. Both Skills and their references are bundled.
 
 ## Configure and verify

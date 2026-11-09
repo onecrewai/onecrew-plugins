@@ -9,6 +9,8 @@
         "HOME",
         "USERPROFILE",
         "LOCALAPPDATA",
+        "ProgramFiles",
+        "ProgramW6432",
         "SYSTEMROOT",
         "COMSPEC",
         "PATHEXT",

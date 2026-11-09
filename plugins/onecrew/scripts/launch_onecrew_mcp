@@ -5,10 +5,30 @@ cd /
 if [ -n "${ONECREW_CONTAINER_RUNTIME:-}" ]; then
   runtime=$ONECREW_CONTAINER_RUNTIME
 else
-  runtime=$(command -v docker) || {
-    printf '%s\n' 'Docker CLI is unavailable. Set ONECREW_CONTAINER_RUNTIME to the absolute path of a Docker-compatible CLI.' >&2
-    exit 127
-  }
+  if runtime=$(command -v docker); then
+    :
+  else
+    for candidate in \
+      /usr/local/bin/docker \
+      /opt/homebrew/bin/docker \
+      /usr/bin/docker \
+      "${HOME:+$HOME/.docker/bin/docker}" \
+      "${HOME:+$HOME/.kiri/bin/docker}" \
+      /Applications/Docker.app/Contents/Resources/bin/docker \
+      /Applications/Kiri.app/Contents/Resources/bin/docker \
+      "${HOME:+$HOME/Applications/Docker.app/Contents/Resources/bin/docker}" \
+      "${HOME:+$HOME/Applications/Kiri.app/Contents/Resources/bin/docker}"
+    do
+      if [ -f "$candidate" ] && [ -x "$candidate" ]; then
+        runtime=$candidate
+        break
+      fi
+    done
+  fi
+fi
+if [ -z "$runtime" ]; then
+  printf '%s\n' 'Docker CLI is unavailable. Set ONECREW_CONTAINER_RUNTIME to the absolute path of a Docker-compatible CLI.' >&2
+  exit 127
 fi
 
 case "$runtime" in

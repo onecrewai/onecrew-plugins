@@ -1,6 +1,10 @@
 @echo off
 setlocal DisableDelayedExpansion
 if not defined ONECREW_CONTAINER_RUNTIME for %%I in (docker.exe) do set "ONECREW_CONTAINER_RUNTIME=%%~$PATH:I"
+if not defined ONECREW_CONTAINER_RUNTIME if defined USERPROFILE if exist "%USERPROFILE%\.docker\bin\docker.exe" set "ONECREW_CONTAINER_RUNTIME=%USERPROFILE%\.docker\bin\docker.exe"
+if not defined ONECREW_CONTAINER_RUNTIME if defined ProgramFiles if exist "%ProgramFiles%\Docker\Docker\resources\bin\docker.exe" set "ONECREW_CONTAINER_RUNTIME=%ProgramFiles%\Docker\Docker\resources\bin\docker.exe"
+if not defined ONECREW_CONTAINER_RUNTIME if defined ProgramW6432 if exist "%ProgramW6432%\Docker\Docker\resources\bin\docker.exe" set "ONECREW_CONTAINER_RUNTIME=%ProgramW6432%\Docker\Docker\resources\bin\docker.exe"
+if not defined ONECREW_CONTAINER_RUNTIME if defined LOCALAPPDATA if exist "%LOCALAPPDATA%\Kiri\bin\docker.exe" set "ONECREW_CONTAINER_RUNTIME=%LOCALAPPDATA%\Kiri\bin\docker.exe"
 if not defined ONECREW_CONTAINER_RUNTIME (
   echo Docker CLI is unavailable. Set ONECREW_CONTAINER_RUNTIME to the absolute path of a Docker-compatible CLI. 1>&2
   exit /b 127

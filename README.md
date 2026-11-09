@@ -3,7 +3,7 @@
 OneCrew shared Skills and plugin marketplace for desktop AI clients.
 
 This is the container preview branch, `codex/container-preview`, with plugin
-version `0.1.23`. It connects to Pro `0.1.30`; see
+version `0.1.24`. It connects to Pro `0.1.30`; see
 [Container installation](plugins/onecrew/skills/onecrew/references/container-installation.md)
 for the image and installation steps. This preview targets macOS Apple Silicon.
 

@@ -5,7 +5,7 @@ For an existing native Pro installation, complete the stop and backup steps in
 
 ## Current preview
 
-- Pro application: `0.1.30`; plugin: `0.1.23` from `codex/container-preview`.
+- Pro application: `0.1.30`; plugin: `0.1.24` from `codex/container-preview`.
 - Image: `ghcr.io/onecrewai/onecrew-pro:0.1.30-container.1` (`linux/arm64`).
 - Image digest: `sha256:8001036a86b35edae7fcfcda72ef1f2984fd00a245403a4d66c1b173dadb4a8c`.
 - The image is public and can be pulled without GitHub credentials.
@@ -74,7 +74,7 @@ codex plugin marketplace add onecrewai/onecrew-plugins --ref "<commit>"
 codex plugin add onecrew@onecrew
 ```
 
-1. Install plugin `0.1.23` using the client's plugin manager and the same repository
+1. Install plugin `0.1.24` using the client's plugin manager and the same repository
    commit as these instructions.
 2. Enable the plugin's OneCrew MCP server and both bundled Skills.
 3. Restart the OneCrew MCP connection. In Codex, start a new conversation after
