@@ -27,7 +27,8 @@ through MCP `account version` or the local `/api/v1/access/version` endpoint.
    absolute executable and data directory; confirm it has exited and the port is free.
    Back up the complete data directory, including account keys and attachments.
 3. Create the container with the downloaded image, `--pull=never` and the existing
-   host directory, using the container guide's startup command. Check the HTTP version.
+   host directory, using the startup command in the installation guide you are
+   following. Check the HTTP version.
 4. Follow the container guide's client connection steps to install the selected
    plugin or standard MCP connection and Skills. Verify the application version,
    original account and table IDs through the new connection.

@@ -14,6 +14,7 @@ connection. Do not replace it with a second manual server or a cached-manifest e
 For standalone Skills, update both complete directories and their references,
 preserve local customizations, and record the source commit.
 
-Restart the client's OneCrew MCP connection and reload its Skills. In Codex, open
-a new conversation after changing the plugin. Call `account` with `action:
-"version"` and `action: "status"` through the client. Report the values returned.
+For WorkBuddy, follow the [restart and verification steps](workbuddy-setup.md#configure-and-verify).
+For other clients, restart the OneCrew MCP connection and reload its Skills;
+in Codex, open a new conversation. Call `account` with `action: "version"` and
+`action: "status"` through the client. Report the values returned.

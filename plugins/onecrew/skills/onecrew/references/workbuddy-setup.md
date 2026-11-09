@@ -7,6 +7,10 @@ For container installation, see [Container installation](container-installation.
 
 1. Identify the running desktop client's configuration directory, `.workbuddy`
    or `.workbuddy-ai`, and its bundled `cli/bin/codebuddy` entry.
+   On Windows, check the running application's installation directory for
+   `resources\app.asar.unpacked\cli\bin\codebuddy`. The usual per-user install
+   directory is `%LOCALAPPDATA%\Programs\WorkBuddy`; use the actual path when
+   installed elsewhere.
 2. Use the client's Node executable and that CLI entry by absolute path.
    For each invocation, pass the CLI path as Node's first argument, followed by
    the plugin command arguments below.
@@ -48,12 +52,17 @@ For container installation, see [Container installation](container-installation.
 
    Remove OneCrew's obsolete `binary_path` and `data_dir` options. Preserve other
    settings. The CLI must use the same Docker context as the Pro container.
-2. Reload WorkBuddy's OneCrew MCP connection and both Skills. Call `account` with
-   `action: "version"` and `action: "status"`. Check the application version,
-   `deployment: "container"`, and account state.
-3. After verification, remove any obsolete manual OneCrew MCP entry replaced by
+   On Windows, save a full `.exe` path, such as the expanded
+   `%LOCALAPPDATA%\Kiri\bin\docker.exe`. Use a JSON parser and serializer to
+   update settings, then read back the path and confirm the executable exists.
+2. Give the user the panel link and [Getting started](getting-started.md) steps.
+   Ask them to fully quit WorkBuddy, reopen it and start a new conversation.
+   WorkBuddy loads the updated MCP connection after restarting. Keep Pro running.
+3. In the new conversation, call `account` with `action: "version"` and
+   `action: "status"`. Check the application version, `deployment: "container"`,
+   and account state. A separate stdio test only verifies the server connection.
+4. After verification, remove any obsolete manual OneCrew MCP entry replaced by
    this plugin. Preserve the client's other MCP servers.
-4. Start a new conversation if WorkBuddy has not loaded the updated connection.
 
 The CLI accepts local marketplace directories and user-scoped plugin installation:
 [CodeBuddy plugin reference](https://www.codebuddy.ai/docs/cli/plugins-reference).

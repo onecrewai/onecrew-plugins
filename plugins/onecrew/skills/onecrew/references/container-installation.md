@@ -6,12 +6,14 @@ For an existing native Pro installation, complete the stop and backup steps in
 ## Current preview
 
 - Pro application: `0.1.30`; plugin: `0.1.24` from `codex/container-preview`.
-- Image: `ghcr.io/onecrewai/onecrew-pro:0.1.30-container.1` (`linux/arm64`).
-- Image digest: `sha256:8001036a86b35edae7fcfcda72ef1f2984fd00a245403a4d66c1b173dadb4a8c`.
+- Image: `ghcr.io/onecrewai/onecrew-pro:0.1.30`.
+- Platforms: `linux/arm64` for Apple Silicon; `linux/amd64` for Intel Mac and Windows x64.
 - The image is public and can be pulled without GitHub credentials.
-- This image targets macOS Apple Silicon.
 
-## Configure and start
+For Windows x64, follow [Windows installation](container-windows.md), then use
+the client connection and update sections below.
+
+## Configure and start on macOS
 
 1. Locate the installed Docker-compatible CLI. Check `command -v docker` first.
    When it is absent from PATH, inspect the installed application and its CLI:
@@ -24,16 +26,25 @@ For an existing native Pro installation, complete the stop and backup steps in
    Use the executable found by its absolute path. For an application installed
    in another directory, check its actual installation directory. Run `context show`
    and `info` through that CLI and start its existing engine when stopped.
-   Install and launch Kiri from its [official downloads](https://runkiri.com/releases)
-   only when no container runtime is installed, then use its `kiri` Docker context.
+   If no container runtime is installed, read the matching Kiri release JSON:
+
+   | Mac | Release JSON |
+   | --- | --- |
+   | Apple Silicon | [latest-mac-arm64.json](https://download.runkiri.com/latest-mac-arm64.json) |
+   | Intel | [latest-mac-x86_64.json](https://download.runkiri.com/latest-mac-x86_64.json) |
+
+   Read `version` and `url` with a JSON parser such as macOS `plutil`.
+   Create the output directory and download the returned `url` with host `curl
+   --fail --location --output "<absolute-archive-path>" "<url>"`.
+   Extract the `.tar.gz` into a local directory with `tar -xzf`, install the
+   extracted `Kiri.app` into Applications, launch it, and use its `kiri` Docker context.
    Use the same CLI and context for container operations and MCP.
 2. [Prepare the image](container-image-pull.md) before stopping an existing Pro
    service. Complete the pull and confirm the image is present in the selected engine.
 3. Use the existing Pro host data directory and port when migrating. For a new
    macOS installation, create `~/Library/Application Support/OneCrewConnect`
    and use port `8091`; choose an available port if another application owns it.
-4. Replace `<IMAGE>` with `ghcr.io/onecrewai/onecrew-pro@` followed by the image
-   digest above, `<DATA_DIR>` with the
+4. Replace `<IMAGE>` with the image above, `<DATA_DIR>` with the
    absolute host data path, `<UID>` and `<GID>` with `id -u` and `id -g`, and
    every `<PORT>` with the selected port. Run:
 
@@ -65,8 +76,9 @@ on the Mac's loopback address is reached from the container through
 
 For WorkBuddy desktop, follow [WorkBuddy setup](workbuddy-setup.md).
 
-For Codex, run `codex plugin marketplace list --json`. If `onecrew` points to
-another source or revision, run `codex plugin marketplace remove onecrew`.
+For Codex, use the current desktop client's CLI and configuration directory.
+Run `codex plugin marketplace list --json`. If `onecrew` points to another source
+or revision, run `codex plugin marketplace remove onecrew`.
 Replace `<commit>` with the repository commit used to read these instructions, then run:
 
 ```sh
@@ -74,12 +86,9 @@ codex plugin marketplace add onecrewai/onecrew-plugins --ref "<commit>"
 codex plugin add onecrew@onecrew
 ```
 
-1. Install plugin `0.1.24` using the client's plugin manager and the same repository
-   commit as these instructions.
-2. Enable the plugin's OneCrew MCP server and both bundled Skills.
-3. Restart the OneCrew MCP connection. In Codex, start a new conversation after
-   changing the installed plugin.
-4. Call `account` with `action: "version"`, then `action: "status"` through the
+1. Check that plugin `0.1.24`, its OneCrew MCP server and both bundled Skills are enabled.
+2. Start a new Codex conversation after changing the installed plugin.
+3. Call `account` with `action: "version"`, then `action: "status"` through the
    plugin. Check the returned version, deployment and account state.
 
 ## Standard MCP clients without a plugin manager

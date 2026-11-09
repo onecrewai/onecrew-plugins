@@ -1,15 +1,15 @@
 # Prepare the application image
 
-`<DOCKER_CLI>` is the selected CLI's absolute path. `<IMAGE>` is
-`ghcr.io/onecrewai/onecrew-pro@` followed by the digest in
-[Container installation](container-installation.md).
+`<DOCKER_CLI>` is the selected CLI's absolute path. `<IMAGE>` is the public image
+reference in [Container installation](container-installation.md).
 
 Keep the existing Pro service running while preparing the image.
 
 1. Run `"<DOCKER_CLI>" pull "<IMAGE>"` and check its exit code. Correct the reported
    error and retry until this command succeeds.
 2. Run `"<DOCKER_CLI>" image inspect "<IMAGE>" --format '{{.Os}} {{.Architecture}}'`.
-   Require `linux arm64`. Then continue with migration or startup using `--pull=never`.
+   Require `linux arm64` on Apple Silicon or `linux amd64` on Intel Mac and
+   Windows x64. Then continue with migration or startup using `--pull=never`.
 
 ## Missing Docker credential helper
 

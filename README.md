@@ -5,14 +5,18 @@ OneCrew shared Skills and plugin marketplace for desktop AI clients.
 This is the container preview branch, `codex/container-preview`, with plugin
 version `0.1.24`. It connects to Pro `0.1.30`; see
 [Container installation](plugins/onecrew/skills/onecrew/references/container-installation.md)
-for the image and installation steps. This preview targets macOS Apple Silicon.
+for the image and installation steps. The image includes Linux ARM64 and AMD64
+for Apple Silicon, Intel Mac and Windows x64 container engines.
 
 The plugin includes a container MCP connection and both shared Skills. Pull and
 start Pro with the commands in [Container installation](plugins/onecrew/skills/onecrew/references/container-installation.md).
 Computers with an existing native installation use the separate
 [native migration case](plugins/onecrew/skills/onecrew/references/native-to-container.md).
 
-For agents installing OneCrew Pro or connecting WorkBuddy and other MCP clients, read [Agent setup and shared Skill workflows](docs/agent-setup.md).
+Installation instructions for AI clients:
+
+- [macOS](docs/agent-setup-macos.md)
+- [Windows](docs/agent-setup-windows.md)
 
 ## Codex
 

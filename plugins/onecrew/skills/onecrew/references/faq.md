@@ -4,6 +4,8 @@ External documentation checked on October 29, 2026.
 
 ## Account connections
 
+For the first use after installation, follow [Getting started](getting-started.md).
+
 ### Which connection does each feature use?
 
 | Feature | Connection | Setup location |
