@@ -3,6 +3,14 @@
 Use the image and Compose configuration supplied for the release. If native Pro
 is already installed, use [the migration case](native-to-container.md).
 
+## Current preview
+
+- Pro application: `0.1.30`; plugin: `0.1.23` from `codex/container-preview`.
+- Image: `ghcr.io/onecrewai/onecrew-pro:0.1.30-container.1` (`linux/arm64`).
+- The image is private and requires GHCR authentication. Keep registry credentials out of chat and source control.
+- Testing uses Kiri on macOS Apple Silicon with existing account data. New Linux
+  sign-in, Windows and WorkBuddy client tests remain pending.
+
 ## Configure and start
 
 1. Choose a host data directory and create it with write access for its owner.
