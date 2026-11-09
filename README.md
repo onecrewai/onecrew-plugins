@@ -1,46 +1,16 @@
 # OneCrew
 
-OneCrew shared Skills and plugin marketplace for desktop AI clients.
+OneCrew plugin 0.1.26 connects AI clients to the OneCrew Pro desktop application.
+It includes the MCP connection and the OneCrew and OneCrew web research Skills.
 
-This is the container preview branch, `codex/container-preview`, with plugin
-version `0.1.24`. It connects to Pro `0.1.30`; see
-[Container installation](plugins/onecrew/skills/onecrew/references/container-installation.md)
-for the image and installation steps. This preview targets macOS Apple Silicon.
+Download and open OneCrew Pro first: https://access.onecrewai.io/download/pro
 
-The plugin includes a container MCP connection and both shared Skills. Pull and
-start Pro with the commands in [Container installation](plugins/onecrew/skills/onecrew/references/container-installation.md).
-Computers with an existing native installation use the separate
-[native migration case](plugins/onecrew/skills/onecrew/references/native-to-container.md).
+Use the guide for the computer running the AI client:
 
-For agents installing OneCrew Pro or connecting WorkBuddy and other MCP clients, read [Agent setup and shared Skill workflows](docs/agent-setup.md).
+- [macOS](https://raw.githubusercontent.com/onecrewai/onecrew-plugins/codex/desktop/docs/agent-setup-macos.md)
+- [Windows](https://raw.githubusercontent.com/onecrewai/onecrew-plugins/codex/desktop/docs/agent-setup-windows.md)
+- [WorkBuddy](https://raw.githubusercontent.com/onecrewai/onecrew-plugins/codex/desktop/plugins/onecrew/skills/onecrew/references/workbuddy-setup.md)
 
-## Codex
-
-```sh
-codex plugin marketplace add onecrewai/onecrew-plugins --ref codex/container-preview
-codex plugin add onecrew@onecrew
-```
-
-Use Codex and OneCrew on the same computer. The plugin uses the Docker CLI and
-the current Docker context to connect to `onecrew-pro`. Docker Desktop and Kiri
-can provide the container engine. Start a new conversation after installation.
-
-To use OneCrew in Codex, type `@` in the chat input, select **OneCrew**, then enter your request.
-
-If OneCrew is already configured from another source or Git ref, run
-`codex plugin marketplace remove onecrew` before adding this source.
-
-## WorkBuddy desktop
-
-Follow [WorkBuddy setup](plugins/onecrew/skills/onecrew/references/workbuddy-setup.md)
-to install the selected plugin revision and connect its MCP server and Skills.
-
-## Standard MCP clients
-
-Follow the numbered [standard MCP setup](plugins/onecrew/skills/onecrew/references/container-installation.md#standard-mcp-clients-without-a-plugin-manager)
-to register the stdio server, install the shared Skills and verify the connection.
-
-## Update in Codex
-
-Follow [Plugin updates](plugins/onecrew/skills/onecrew/references/plugin-update.md)
-to select the source and verify the installed files. Update the Pro image separately.
+Update the application in the desktop launcher. Update the plugin through the AI
+client's plugin manager. Standard MCP clients install both complete Skill
+directories using the steps in the platform guide.

@@ -9,11 +9,9 @@ Follow the user's language for replies and user-facing content unless they reque
 
 For installation paths, application or plugin version checks, or application updates, read [Installation and versions](references/installation-and-versions.md).
 
-For a container installation, read [Container installation](references/container-installation.md). `account version` reports `deployment: "container"` for this mode.
+For requests to open the dashboard or Web panel, call `onecrew_runtime` with `action: "status"`. When `state` is `running`, return a clickable `/library` link at the returned `url`, preserving its port. For HTTP-only MCP, use the origin of `account`'s returned `login_url`.
 
-For switching an existing native installation to a container, read [Native-to-container case](references/native-to-container.md).
-
-If only `onecrew_runtime` is available, use `status` or `diagnose` to inspect the local service. When its schema offers `start`, use that action for a request that needs the stopped service, then refresh the tool list and continue. Container installations start through their configured container runtime. Report the returned error if startup fails.
+The desktop launcher manages service start, stop and application updates. When the service is `stopped`, direct the user to Start in the installed launcher. For `unavailable`, use `diagnose` and report the error. If only `onecrew_runtime` is available while the service is running, reconnect MCP when business tools are needed.
 
 For plugin installation, updates or reinstallation, use the current client's plugin manager. Codex-specific steps are in [Plugin updates](references/plugin-update.md).
 

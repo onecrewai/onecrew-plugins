@@ -1,19 +1,14 @@
-# Update OneCrew instructions
+# Update the OneCrew plugin and Skills
 
-Use the source revision and version selected by the release instructions or the
-user. Application image updates and instruction updates are independent.
+1. Use the repository revision selected by the update prompt. Read its macOS
+   or Windows connection guide under `docs` in that same checkout.
+2. Use the current client's plugin manager to update the OneCrew bundle. Verify
+   its installed `plugin.json` version. Preserve the desktop data directory.
+3. For standard MCP clients, update both complete Skill directories and their
+   references. Record the source commit. Keep the MCP command pointed at the
+   desktop application's bundled Node and CLI entry.
+4. Reload OneCrew in the client. WorkBuddy requires a full quit and restart;
+   Codex requires a new conversation. Verify `account` actions `version` and
+   `status` through the client.
 
-For an installed plugin bundle, use the current client's plugin manager. Verify
-the installed version and files after updating. A plugin-only update does not
-install or update the Pro application.
-
-If the application is still native, use [the migration case](native-to-container.md).
-The plugin supplies its own container MCP server; keep it as the active OneCrew
-connection. Do not replace it with a second manual server or a cached-manifest edit.
-
-For standalone Skills, update both complete directories and their references,
-preserve local customizations, and record the source commit.
-
-Restart the client's OneCrew MCP connection and reload its Skills. In Codex, open
-a new conversation after changing the plugin. Call `account` with `action:
-"version"` and `action: "status"` through the client. Report the values returned.
+Update the desktop application through its launcher.
