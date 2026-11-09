@@ -1,6 +1,6 @@
 {
   "name": "onecrew",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "Discover creators, read public web sources, manage email, and maintain OneCrew workspace data.",
   "author": {
     "name": "OneCrew"
@@ -8,15 +8,21 @@
   "homepage": "https://onecrewai.io/",
   "skills": "./skills/",
   "userConfig": {
-    "runtime_path": {
+    "node_path": {
       "type": "string",
-      "description": "Absolute path to docker or another Docker-compatible CLI",
+      "description": "Absolute path to Node bundled in the OneCrew Pro desktop application",
       "required": true,
       "sensitive": false
     },
-    "container_name": {
+    "cli_path": {
       "type": "string",
-      "description": "Name of the running OneCrew container, normally onecrew-pro",
+      "description": "Absolute path to onecrew-runtime/dist/cli.js in the desktop application",
+      "required": true,
+      "sensitive": false
+    },
+    "data_dir": {
+      "type": "string",
+      "description": "Absolute data directory shown by the OneCrew Pro launcher",
       "required": true,
       "sensitive": false
     }
@@ -24,8 +30,8 @@
   "mcpServers": {
     "onecrew": {
       "type": "stdio",
-      "command": "${user_config.runtime_path}",
-      "args": ["exec", "-i", "${user_config.container_name}", "node", "/app/dist/cli.js", "mcp"]
+      "command": "${user_config.node_path}",
+      "args": ["${user_config.cli_path}", "mcp", "--data-dir", "${user_config.data_dir}"]
     }
   }
 }

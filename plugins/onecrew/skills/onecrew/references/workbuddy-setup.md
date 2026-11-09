@@ -1,12 +1,15 @@
 # WorkBuddy desktop setup
 
-Use this guide for WorkBuddy after the Pro container is running.
-For container installation, see [Container installation](container-installation.md).
+Open the OneCrew Pro desktop launcher and start its service before connecting WorkBuddy.
 
 ## Locate the desktop client
 
 1. Identify the running desktop client's configuration directory, `.workbuddy`
    or `.workbuddy-ai`, and its bundled `cli/bin/codebuddy` entry.
+   On Windows, check the running application's installation directory for
+   `resources\app.asar.unpacked\cli\bin\codebuddy`. The usual per-user install
+   directory is `%LOCALAPPDATA%\Programs\WorkBuddy`; use the actual path when
+   installed elsewhere.
 2. Use the client's Node executable and that CLI entry by absolute path.
    For each invocation, pass the CLI path as Node's first argument, followed by
    the plugin command arguments below.
@@ -21,7 +24,7 @@ For container installation, see [Container installation](container-installation.
    used to read the installation guide. Replace both placeholders before running:
 
    ```sh
-   git clone --branch codex/container-preview --single-branch https://github.com/onecrewai/onecrew-plugins.git "<source-dir>"
+   git clone --branch codex/desktop-preview --single-branch https://github.com/onecrewai/onecrew-plugins.git "<source-dir>"
    git -C "<source-dir>" fetch origin "<commit>"
    git -C "<source-dir>" switch --detach "<commit>"
    ```
@@ -32,7 +35,7 @@ For container installation, see [Container installation](container-installation.
    then add this checkout with `plugin marketplace add "<source-dir>"`.
 3. Install with `plugin install onecrew@onecrew --scope user`. For an installed
    plugin from the selected source, use `plugin update onecrew@onecrew --scope user`.
-   Confirm `plugin list --json` reports version `0.1.24` and the installed files
+   Confirm `plugin list --json` reports version `0.1.25` and the installed files
    match the selected source. Both Skills and their references are bundled.
 
 ## Configure and verify
@@ -43,17 +46,22 @@ For container installation, see [Container installation](container-installation.
 
    | Option | Value |
    | --- | --- |
-   | `runtime_path` | Absolute path to the Docker-compatible CLI used to start Pro |
-   | `container_name` | Actual Pro container name, normally `onecrew-pro` |
+   | `node_path` | Full path to the desktop application's `onecrew-runtime/bin/node.exe` on Windows or `onecrew-runtime/bin/node` on macOS |
+   | `cli_path` | Full path to that application's `onecrew-runtime/dist/cli.js` |
+   | `data_dir` | Full data directory shown in the OneCrew Pro launcher |
 
-   Remove OneCrew's obsolete `binary_path` and `data_dir` options. Preserve other
-   settings. The CLI must use the same Docker context as the Pro container.
-2. Reload WorkBuddy's OneCrew MCP connection and both Skills. Call `account` with
-   `action: "version"` and `action: "status"`. Check the application version,
-   `deployment: "container"`, and account state.
-3. After verification, remove any obsolete manual OneCrew MCP entry replaced by
+   Replace OneCrew's obsolete `binary_path`, `runtime_path` and `container_name`
+   options with the three values above. Preserve other settings.
+   Use a JSON parser and serializer to
+   update settings, then read back the path and confirm the executable exists.
+2. Give the user the panel link and [Getting started](getting-started.md) steps.
+   Ask them to fully quit WorkBuddy, reopen it and start a new conversation.
+   WorkBuddy loads the updated MCP connection after restarting. Keep Pro running.
+3. In the new conversation, call `account` with `action: "version"` and
+   `action: "status"`. Check the application version, `deployment: "desktop"`,
+   and account state. A separate stdio test only verifies the server connection.
+4. After verification, remove any obsolete manual OneCrew MCP entry replaced by
    this plugin. Preserve the client's other MCP servers.
-4. Start a new conversation if WorkBuddy has not loaded the updated connection.
 
 The CLI accepts local marketplace directories and user-scoped plugin installation:
 [CodeBuddy plugin reference](https://www.codebuddy.ai/docs/cli/plugins-reference).

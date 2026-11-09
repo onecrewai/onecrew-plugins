@@ -4,6 +4,8 @@ External documentation checked on October 29, 2026.
 
 ## Account connections
 
+For the first use after installation, follow [Getting started](getting-started.md).
+
 ### Which connection does each feature use?
 
 | Feature | Connection | Setup location |
@@ -127,12 +129,12 @@ Connection lists show local records and the last check time. Reading the list do
 
 Restarting the computer ends the local OneCrew process. `ERR_CONNECTION_REFUSED` at `127.0.0.1` means the page cannot connect to the local service. Check whether OneCrew is running and which port it uses before checking sign-in or platform accounts.
 
-For a container installation, check the runtime and configured OneCrew container,
-start that container when stopped, then reconnect MCP and open its local URL.
-The client's MCP command identifies the runtime executable. See
-[Container installation](container-installation.md) for configuration and
-[the native migration case](native-to-container.md) for an older installation.
-After startup, verify HTTP and MCP and report the actual error if either fails.
+Open the installed OneCrew Pro desktop launcher. Select Start when the service
+is stopped, then use Open panel and reconnect MCP. Startup settings separately
+control launching OneCrew at system login and starting Pro when opening OneCrew.
+Check the displayed service error and log if startup fails. The plugin uses
+absolute paths to the bundled runtime; adding Node or OneCrew to system PATH
+is unnecessary.
 
 ### Why can a configured email sender have an OAuth error?
 
