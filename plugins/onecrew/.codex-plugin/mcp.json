@@ -13,9 +13,8 @@
         "COMSPEC",
         "PATHEXT",
         "PATH",
-        "ONECREW_BINARY",
-        "ONECREW_DATA_DIR",
-        "ONECREW_INSTALL_DIR"
+        "ONECREW_CONTAINER_RUNTIME",
+        "ONECREW_CONTAINER_NAME"
       ]
     }
   }

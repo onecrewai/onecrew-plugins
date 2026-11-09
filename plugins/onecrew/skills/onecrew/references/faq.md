@@ -127,9 +127,12 @@ Connection lists show local records and the last check time. Reading the list do
 
 Restarting the computer ends the local OneCrew process. `ERR_CONNECTION_REFUSED` at `127.0.0.1` means the page cannot connect to the local service. Check whether OneCrew is running and which port it uses before checking sign-in or platform accounts.
 
-The assistant uses `onecrew_runtime` with `status` or `diagnose`, starts the service when stopped, then refreshes the tools and opens the returned local URL. If that tool is unavailable, invoke the configured executable by its absolute path with `status` or `start` and the existing data directory; see [Installation and versions](installation-and-versions.md#locate-the-current-installation). After startup, check HTTP and MCP. Report the actual error if startup fails. Saved accounts and workspace data are preserved.
-
-On Windows, the configured `onecrew.exe` can run without adding OneCrew to the system or user PATH. A shell reporting that `onecrew-pro` is not found only means it cannot resolve that command; check the service through its configured executable or HTTP address.
+For a container installation, check the runtime and configured OneCrew container,
+start that container when stopped, then reconnect MCP and open its local URL.
+The client's MCP command identifies the runtime executable. See
+[Container installation](container-installation.md) for configuration and
+[the native migration case](native-to-container.md) for an older installation.
+After startup, verify HTTP and MCP and report the actual error if either fails.
 
 ### Why can a configured email sender have an OAuth error?
 

@@ -1,16 +1,18 @@
-# Update the OneCrew Codex plugin
+# Update OneCrew instructions
 
-Use this workflow when the user asks to install, update or reinstall the OneCrew plugin in Codex.
+Use the source revision and version selected by the release instructions or the
+user. Application image updates and instruction updates are independent.
 
-Read the current npm installation guide for the target computer. Use the complete URL from the user's prompt when one is supplied.
+For an installed plugin bundle, use the current client's plugin manager. Verify
+the installed version and files after updating. A plugin-only update does not
+install or update the Pro application.
 
-On Windows, run installation and update commands in a local Codex project conversation. If the current conversation has no project, guide the user to create or open a local project and start a new conversation there with the Access guide. For an `EPERM` or `EACCES` failure from an ordinary conversation, preserve the failed command and path and resume in that project conversation. If the operation remains blocked, use Codex's supported approval flow for the required paths; creating a project does not grant system permissions. See [Windows sandbox permissions](https://learn.chatgpt.com/docs/windows/windows-sandbox).
+If the application is still native, use [the migration case](native-to-container.md).
+The plugin supplies its own container MCP server; keep it as the active OneCrew
+connection. Do not replace it with a second manual server or a cached-manifest edit.
 
-| System | npm installation guide |
-| --- | --- |
-| macOS | [Access guide](https://access.onecrewai.io/cli/install/pro/npm) |
-| Windows x64 | [Access guide](https://access.onecrewai.io/cli/install/pro/npm/windows) |
+For standalone Skills, update both complete directories and their references,
+preserve local customizations, and record the source commit.
 
-Follow the guide's Codex plugin section. It specifies the published plugin version, source commit, marketplace commands and verification. The plugin and application have independent versions; a plugin-only request keeps the application binary, data directory and login unchanged.
-
-After a new installation or update, start a new Codex conversation to load the plugin and verify one read-only OneCrew `account` status call there. Report any remaining new-conversation check separately from file installation.
+Reload the client's instructions and MCP connection as required. Verify one
+read-only `account status` call and report any conversation reload still pending.

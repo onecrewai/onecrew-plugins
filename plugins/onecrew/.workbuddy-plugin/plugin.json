@@ -8,15 +8,15 @@
   "homepage": "https://onecrewai.io/",
   "skills": "./skills/",
   "userConfig": {
-    "binary_path": {
+    "runtime_path": {
       "type": "string",
-      "description": "OneCrew 程序绝对路径 / Executable path: onecrew-pro --print-binary-path",
+      "description": "Absolute path to the container runtime executable",
       "required": true,
       "sensitive": false
     },
-    "data_dir": {
+    "container_name": {
       "type": "string",
-      "description": "OneCrew 数据目录 / Data directory: onecrew-pro status",
+      "description": "Name of the running OneCrew container, normally onecrew-pro",
       "required": true,
       "sensitive": false
     }
@@ -24,8 +24,8 @@
   "mcpServers": {
     "onecrew": {
       "type": "stdio",
-      "command": "${user_config.binary_path}",
-      "args": ["mcp", "--data-dir", "${user_config.data_dir}"]
+      "command": "${user_config.runtime_path}",
+      "args": ["exec", "-i", "${user_config.container_name}", "node", "/app/dist/cli.js", "mcp"]
     }
   }
 }
