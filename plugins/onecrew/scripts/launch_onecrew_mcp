@@ -3,7 +3,13 @@ set -eu
 
 runtime=${ONECREW_DESKTOP_RUNTIME:-}
 if [ -z "$runtime" ]; then
-  for application in '/Applications/OneCrew Pro.app' "$HOME/Applications/OneCrew Pro.app"; do
+  for application in \
+    '/Applications/OneCrew Pro.app' \
+    "$HOME/Applications/OneCrew Pro.app" \
+    '/Applications/OneCrew Pro-darwin-arm64/OneCrew Pro.app' \
+    '/Applications/OneCrew Pro-darwin-x64/OneCrew Pro.app' \
+    "$HOME/Applications/OneCrew Pro-darwin-arm64/OneCrew Pro.app" \
+    "$HOME/Applications/OneCrew Pro-darwin-x64/OneCrew Pro.app"; do
     candidate="$application/Contents/Resources/onecrew-runtime"
     if [ -x "$candidate/bin/node" ] && [ -f "$candidate/dist/cli.js" ]; then
       runtime=$candidate

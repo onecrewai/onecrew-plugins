@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "onecrew",
-      "version": "0.1.26",
+      "version": "0.1.27",
       "source": "./plugins/onecrew",
       "description": "OneCrew MCP, creator discovery, web research, email, and workspace Skills."
     }

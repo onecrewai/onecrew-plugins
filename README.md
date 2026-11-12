@@ -1,6 +1,6 @@
 # OneCrew
 
-OneCrew plugin 0.1.26 connects AI clients to the OneCrew Pro desktop application.
+OneCrew plugin 0.1.27 connects AI clients to the OneCrew Pro desktop application.
 It includes the MCP connection and the OneCrew and OneCrew web research Skills.
 
 Download and open OneCrew Pro first: https://access.onecrewai.io/download/pro
